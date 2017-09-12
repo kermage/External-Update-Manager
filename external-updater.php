@@ -9,8 +9,9 @@ class External_Updater {
 
 	public $transient;
 
-	public function __construct( $fullpath, $slug ) {
+	public function __construct( $fullpath ) {
 		$type = $this->get_type( $fullpath );
+		$slug = basename( dirname( $fullpath ) );
 		$this->transient = 'external_updater_' . $type . '_' . $slug;
 
 		add_filter( 'site_transient_update_' . $type . 's', array( $this, 'inject_updater' ) );
