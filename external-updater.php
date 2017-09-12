@@ -9,10 +9,21 @@ class External_Updater {
 
 	public $transient;
 
-	public function __construct( $type, $slug ) {
+	public function __construct( $fullpath, $slug ) {
+		$type = $this->get_type( $fullpath );
 		$this->transient = 'external_updater_' . $type . '_' . $slug;
 
 		add_filter( 'site_transient_update_' . $type . 's', array( $this, 'inject_updater' ) );
+	}
+
+	public function get_type( $path ) {
+
+		if ( file_exists( dirname( $path ) . '/style.css' ) ) {
+			return 'theme';
+		} else {
+			return 'plugin';
+		}
+
 	}
 
 	public function inject_updater( $transient ) {
