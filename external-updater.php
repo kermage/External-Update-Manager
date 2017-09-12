@@ -68,7 +68,6 @@ class External_Updater {
 		}
 
 		return $version;
-		}
 	}
 
 }
