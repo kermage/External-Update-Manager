@@ -7,22 +7,27 @@
 
 class External_Updater {
 
+	public $type;
+	public $slug;
 	public $transient;
 
 	public function __construct( $fullpath ) {
-		$type = $this->get_type( $fullpath );
-		$slug = basename( dirname( $fullpath ) );
-		$this->transient = 'external_updater_' . $type . '_' . $slug;
+		$this->get_details( $fullpath );
+		$this->transient = 'external_updater_' . $this->type . '_' . $this->slug;
 
-		add_filter( 'site_transient_update_' . $type . 's', array( $this, 'inject_updater' ) );
+		add_filter( 'site_transient_update_' . $this->type . 's', array( $this, 'inject_updater' ) );
 	}
 
-	public function get_type( $path ) {
+	public function get_details( $path ) {
+		$folder = dirname( $path );
+		$folder_name = basename( $folder );
 
-		if ( file_exists( dirname( $path ) . '/style.css' ) ) {
-			return 'theme';
+		$this->slug = $folder_name;
+
+		if ( file_exists( $folder . '/style.css' ) ) {
+			$this->type = 'theme';
 		} else {
-			return 'plugin';
+			$this->type = 'plugin';
 		}
 
 	}
