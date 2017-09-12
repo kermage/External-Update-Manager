@@ -5,6 +5,7 @@
  * @since 0.1.0
  */
 
+if ( ! class_exists( 'External_Updater' ) ) :
 class External_Updater {
 
 	public $fullpath;
@@ -71,3 +72,4 @@ class External_Updater {
 	}
 
 }
+endif;
