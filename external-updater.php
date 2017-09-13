@@ -14,7 +14,6 @@ class External_Updater {
 	public $slug;
 	public $key;
 	public $transient;
-	public $checked = false;
 
 	public function __construct( $fullpath, $metadata ) {
 		$this->fullpath = $fullpath;
@@ -42,10 +41,6 @@ class External_Updater {
 	}
 
 	public function inject_updater( $transient ) {
-		if ( $this->checked ) {
-			return $transient;
-		}
-
 		$status = get_site_transient( $this->transient );
 
 		if ( ! is_object( $status ) ) {
@@ -60,8 +55,6 @@ class External_Updater {
 				unset( $transient->response[$this->key] );
 			}
 		}
-
-		$this->checked = true;
 
 		return $transient;
 	}
