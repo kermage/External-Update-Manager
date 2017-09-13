@@ -9,6 +9,7 @@ if ( ! class_exists( 'External_Updater' ) ) :
 class External_Updater {
 
 	public $fullpath;
+	public $metadata;
 	public $type;
 	public $slug;
 	public $transient;
@@ -88,7 +89,7 @@ class External_Updater {
 		);
 		$raw_response = wp_remote_post( $this->metadata, $args );
 
-		return $raw_response['body'];
+		return unserialize( $raw_response['body'] );
 	}
 
 }
