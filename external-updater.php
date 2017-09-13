@@ -71,7 +71,7 @@ class External_Updater {
 		);
 		$response = $this->api_call( $args );
 
-		if ( version_compare( $status->current_version, $response->latest_version, '<' ) ) {
+		if ( version_compare( $status->current_version, $response->new_version, '<' ) ) {
 			$status->update = $this->format_data( $response );
 		}
 
