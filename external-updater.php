@@ -50,6 +50,10 @@ class External_Updater {
 			set_site_transient( $this->transient, $status, HOUR_IN_SECONDS );
 		}
 
+		if ( ! empty( $status->update ) ) {
+			$transient->response[$this->slug] = $status->update;
+		}
+
 		$this->checked = true;
 
 		return $transient;
@@ -66,6 +70,10 @@ class External_Updater {
 			'slug' => $this->slug
 		);
 		$response = $this->api_call( $args );
+
+		if ( version_compare( $status->current_version, $response->latest_version, '<' ) ) {
+			$status->update = $response;
+		}
 
 		return $status;
 	}
