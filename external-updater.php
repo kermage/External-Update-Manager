@@ -75,7 +75,7 @@ class External_Updater {
 		$response = $this->api_call( $args );
 
 		if ( version_compare( $status->current_version, $response->latest_version, '<' ) ) {
-			$status->update = $response;
+			$status->update = $this->format_data( $response );
 		}
 
 		return $status;
@@ -113,6 +113,19 @@ class External_Updater {
 		}
 
 		return $response;
+	}
+
+	public function format_data( $unformatted ) {
+		if ( $this->type == 'theme' ) {
+			$formatted = (array) $unformatted;
+			$formatted['theme'] = $this->slug;
+		} else {
+			$formatted = (object) $unformatted;
+			$formatted->slug = $this->slug;
+			$formatted->plugin = $this->key;
+		}
+
+		return $formatted;
 	}
 
 }
