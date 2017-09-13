@@ -13,8 +13,9 @@ class External_Updater {
 	public $slug;
 	public $transient;
 
-	public function __construct( $fullpath ) {
+	public function __construct( $fullpath, $metadata ) {
 		$this->fullpath = $fullpath;
+		$this->metadata = $metadata;
 		$this->get_details( $fullpath );
 		$this->transient = 'external_updater_' . $this->type . '_' . $this->slug;
 
@@ -52,6 +53,12 @@ class External_Updater {
 		$status->update = null;
 		$status->current_version = $this->get_current_version();
 
+		$args = array(
+			'type' => $this->type,
+			'slug' => $this->slug
+		);
+		$response = $this->api_call( $args );
+
 		return $status;
 	}
 
@@ -69,6 +76,19 @@ class External_Updater {
 		}
 
 		return $version;
+	}
+
+	public function api_call( $request ) {
+		$args = array(
+			'body' => array(
+				'action' => 'update',
+				'request' => serialize( $request ),
+				'website' => get_bloginfo( 'url' )
+			),
+		);
+		$raw_response = wp_remote_post( $this->metadata, $args );
+
+		return $raw_response['body'];
 	}
 
 }
