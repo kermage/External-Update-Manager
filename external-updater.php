@@ -88,8 +88,13 @@ class External_Updater {
 			),
 		);
 		$raw_response = wp_remote_post( $this->metadata, $args );
+		$response = null;
 
-		return unserialize( $raw_response['body'] );
+		if ( isset( $raw_response['body'] ) && isset( $raw_response['response']['code'] ) && ( $raw_response['response']['code'] == 200 ) ) {
+			$response = unserialize( $raw_response['body'] );
+		}
+
+		return $response;
 	}
 
 }
