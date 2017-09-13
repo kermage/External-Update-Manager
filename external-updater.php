@@ -55,6 +55,10 @@ class External_Updater {
 
 		if ( ! empty( $status->update ) ) {
 			$transient->response[$this->key] = $status->update;
+		} else {
+			if ( isset ( $transient->response[$this->key] ) ) {
+				unset( $transient->response[$this->key] );
+			}
 		}
 
 		$this->checked = true;
