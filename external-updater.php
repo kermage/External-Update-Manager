@@ -13,6 +13,7 @@ class External_Updater {
 	public $type;
 	public $slug;
 	public $transient;
+	public $checked = false;
 
 	public function __construct( $fullpath, $metadata ) {
 		$this->fullpath = $fullpath;
@@ -38,12 +39,18 @@ class External_Updater {
 	}
 
 	public function inject_updater( $transient ) {
+		if ( $this->checked ) {
+			return $transient;
+		}
+
 		$status = get_site_transient( $this->transient );
 
 		if ( ! is_object( $status ) ) {
 			$status = $this->check_for_update();
 			set_site_transient( $this->transient, $status, HOUR_IN_SECONDS );
 		}
+
+		$this->checked = true;
 
 		return $transient;
 	}
