@@ -12,6 +12,7 @@ class External_Updater {
 	public $metadata;
 	public $type;
 	public $slug;
+	public $key;
 	public $transient;
 	public $checked = false;
 
@@ -32,8 +33,10 @@ class External_Updater {
 
 		if ( file_exists( $folder . '/style.css' ) ) {
 			$this->type = 'theme';
+			$this->key = $folder_name;
 		} else {
 			$this->type = 'plugin';
+			$this->key = plugin_basename( $path );
 		}
 
 	}
@@ -51,7 +54,7 @@ class External_Updater {
 		}
 
 		if ( ! empty( $status->update ) ) {
-			$transient->response[$this->slug] = $status->update;
+			$transient->response[$this->key] = $status->update;
 		}
 
 		$this->checked = true;
