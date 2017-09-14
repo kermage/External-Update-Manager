@@ -66,6 +66,7 @@ class External_Updater {
 		$status->current_version = $this->get_current_version();
 
 		$args = array(
+			'action' => 'update',
 			'type' => $this->type,
 			'slug' => $this->slug
 		);
@@ -95,18 +96,13 @@ class External_Updater {
 	}
 
 	public function api_call( $request ) {
-		$args = array(
-			'body' => array(
-				'action' => 'update',
-				'request' => serialize( $request ),
-				'website' => get_bloginfo( 'url' )
-			),
-		);
-		$raw_response = wp_remote_post( $this->metadata, $args );
+		$url = add_query_arg( $request, $this->metadata );
+		$options = array( 'timeout' => 10 );
+		$raw_response = wp_remote_get( $url, $options );
 		$response = null;
 
 		if ( ! is_wp_error( $raw_response ) && isset( $raw_response['body'] ) && isset( $raw_response['response']['code'] ) && ( $raw_response['response']['code'] == 200 ) ) {
-			$response = unserialize( $raw_response['body'] );
+			$response = json_decode( $raw_response['body'] );
 		}
 
 		return $response;
