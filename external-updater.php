@@ -24,6 +24,8 @@ class External_Updater {
 		$this->transient = 'external_updater_' . $this->type . '_' . $this->slug;
 
 		add_filter( 'site_transient_update_' . $this->type . 's', array( $this, 'inject_updater' ) );
+
+		$this->maybe_delete_transient();
 	}
 
 	private function get_details( $path ) {
@@ -118,6 +120,12 @@ class External_Updater {
 		}
 
 		return $formatted;
+	}
+
+	private function maybe_delete_transient() {
+		if ( $GLOBALS['pagenow'] === 'update-core.php' && isset( $_GET['force-check'] ) ) {
+			delete_site_transient( $this->transient );
+		}
 	}
 
 }
