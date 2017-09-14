@@ -98,14 +98,13 @@ class External_Updater {
 	public function api_call( $request ) {
 		$url = add_query_arg( $request, $this->metadata );
 		$options = array( 'timeout' => 10 );
-		$raw_response = wp_remote_get( $url, $options );
-		$response = null;
+		$response = wp_remote_get( $url, $options );
+		$code = wp_remote_retrieve_response_code( $response );
+		$body = wp_remote_retrieve_body( $response );
 
-		if ( ! is_wp_error( $raw_response ) && isset( $raw_response['body'] ) && isset( $raw_response['response']['code'] ) && ( $raw_response['response']['code'] == 200 ) ) {
-			$response = json_decode( $raw_response['body'] );
+		if ( $code === 200 ) {
+			return json_decode( $body );
 		}
-
-		return $response;
 	}
 
 	public function format_data( $unformatted ) {
