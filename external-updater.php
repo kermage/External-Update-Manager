@@ -8,13 +8,13 @@
 if ( ! class_exists( 'External_Updater' ) ) :
 class External_Updater {
 
-	public $fullpath;
-	public $metadata;
-	public $type;
-	public $slug;
-	public $key;
-	public $transient;
-	public $current_version = '';
+	private $fullpath;
+	private $metadata;
+	private $type;
+	private $slug;
+	private $key;
+	private $transient;
+	private $current_version = '';
 
 	public function __construct( $fullpath, $metadata ) {
 		$this->fullpath = $fullpath;
@@ -25,7 +25,7 @@ class External_Updater {
 		add_filter( 'site_transient_update_' . $this->type . 's', array( $this, 'inject_updater' ) );
 	}
 
-	public function get_details( $path ) {
+	private function get_details( $path ) {
 		$folder = dirname( $path );
 		$folder_name = basename( $folder );
 
@@ -38,7 +38,6 @@ class External_Updater {
 			$this->type = 'plugin';
 			$this->key = plugin_basename( $path );
 		}
-
 	}
 
 	public function inject_updater( $transient ) {
@@ -55,7 +54,7 @@ class External_Updater {
 		return $transient;
 	}
 
-	public function get_data() {
+	private function get_data() {
 		$status = get_site_transient( $this->transient );
 
 		if ( ! is_object( $status ) ) {
@@ -66,7 +65,7 @@ class External_Updater {
 		return $status;
 	}
 
-	public function check_for_update() {
+	private function check_for_update() {
 		$status = new StdClass;
 		$status->last_checked = time();
 		$status->update = null;
@@ -80,7 +79,7 @@ class External_Updater {
 		return $status;
 	}
 
-	public function get_current_version() {
+	private function get_current_version() {
 		if ( $this->current_version ) {
 			return $this->current_version;
 		}
@@ -102,7 +101,7 @@ class External_Updater {
 		return $version;
 	}
 
-	public function api_call() {
+	private function api_call() {
 		$request = array(
 			'action' => 'update',
 			'type' => $this->type,
@@ -119,7 +118,7 @@ class External_Updater {
 		}
 	}
 
-	public function format_data( $unformatted ) {
+	private function format_data( $unformatted ) {
 		if ( $this->type == 'theme' ) {
 			$formatted = (array) $unformatted;
 			$formatted['theme'] = $this->slug;
