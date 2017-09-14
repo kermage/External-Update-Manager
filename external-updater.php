@@ -41,12 +41,7 @@ class External_Updater {
 	}
 
 	public function inject_updater( $transient ) {
-		$status = get_site_transient( $this->transient );
-
-		if ( ! is_object( $status ) ) {
-			$status = $this->check_for_update();
-			set_site_transient( $this->transient, $status, HOUR_IN_SECONDS );
-		}
+		$status = $this->get_data();
 
 		if ( ! empty( $status->update ) ) {
 			$transient->response[$this->key] = $status->update;
@@ -57,6 +52,17 @@ class External_Updater {
 		}
 
 		return $transient;
+	}
+
+	public function get_data() {
+		$status = get_site_transient( $this->transient );
+
+		if ( ! is_object( $status ) ) {
+			$status = $this->check_for_update();
+			set_site_transient( $this->transient, $status, HOUR_IN_SECONDS );
+		}
+
+		return $status;
 	}
 
 	public function check_for_update() {
