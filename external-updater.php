@@ -15,6 +15,7 @@ class External_Updater {
 	private $key;
 	private $transient;
 	private $current_version = '';
+	private $update_status = null;
 
 	public function __construct( $fullpath, $metadata ) {
 		$this->fullpath = $fullpath;
@@ -51,6 +52,10 @@ class External_Updater {
 	}
 
 	private function get_data() {
+		if ( $this->update_status ) {
+			return $this->update_status;
+		}
+
 		$status = get_site_transient( $this->transient );
 
 		if ( ! is_object( $status ) ) {
@@ -58,6 +63,7 @@ class External_Updater {
 			set_site_transient( $this->transient, $status, HOUR_IN_SECONDS );
 		}
 
+		$this->update_status = $status;
 
 		return $status;
 	}
