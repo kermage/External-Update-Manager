@@ -14,6 +14,7 @@ class External_Updater {
 	public $slug;
 	public $key;
 	public $transient;
+	public $current_version = '';
 
 	public function __construct( $fullpath, $metadata ) {
 		$this->fullpath = $fullpath;
@@ -80,6 +81,10 @@ class External_Updater {
 	}
 
 	public function get_current_version() {
+		if ( $this->current_version ) {
+			return $this->current_version;
+		}
+
 		if ( $this->type == 'theme' ) {
 			$data = wp_get_theme( $this->slug );
 			$version = $data->get( 'Version' );
@@ -91,6 +96,8 @@ class External_Updater {
 			$data = get_plugin_data( $this->fullpath, false, false );
 			$version = $data['Version'];
 		}
+
+		$this->current_version = $version;
 
 		return $version;
 	}
