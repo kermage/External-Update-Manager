@@ -64,13 +64,7 @@ class External_Updater {
 		$status->last_checked = time();
 		$status->update = null;
 		$status->current_version = $this->get_current_version();
-
-		$args = array(
-			'action' => 'update',
-			'type' => $this->type,
-			'slug' => $this->slug
-		);
-		$response = $this->api_call( $args );
+		$response = $this->api_call();
 
 		if ( version_compare( $status->current_version, $response->new_version, '<' ) ) {
 			$status->update = $this->format_data( $response );
@@ -95,7 +89,12 @@ class External_Updater {
 		return $version;
 	}
 
-	public function api_call( $request ) {
+	public function api_call() {
+		$request = array(
+			'action' => 'update',
+			'type' => $this->type,
+			'slug' => $this->slug
+		);
 		$url = add_query_arg( $request, $this->metadata );
 		$options = array( 'timeout' => 10 );
 		$response = wp_remote_get( $url, $options );
