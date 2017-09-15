@@ -8,20 +8,20 @@
 if ( ! class_exists( 'External_Updater' ) ) :
 class External_Updater {
 
-	private $fullpath;
-	private $metadata;
+	private $full_path;
+	private $update_url;
 	private $type;
 	private $slug;
 	private $key;
-	private $transient;
+	private $transient = 'external_updater_';
 	private $current_version = '';
-	private $update_status = null;
+	private $update_data = null;
 
-	public function __construct( $fullpath, $metadata ) {
-		$this->fullpath = $fullpath;
-		$this->metadata = $metadata;
-		$this->get_file_details( $fullpath );
-		$this->transient = 'external_updater_' . $this->type . '_' . $this->slug;
+	public function __construct( $full_path, $update_url ) {
+		$this->full_path = $full_path;
+		$this->update_url = $update_url;
+		$this->get_file_details( $full_path );
+		$this->transient .= $this->type . '_' . $this->slug;
 
 		add_filter( 'site_transient_update_' . $this->type . 's', array( $this, 'set_available_update' ) );
 
@@ -44,30 +44,30 @@ class External_Updater {
 	}
 
 	public function set_available_update( $transient ) {
-		$status = $this->get_remote_data();
+		$remote_data = $this->get_remote_data();
 
-		if ( version_compare( $this->get_current_version(), $status->new_version, '<' ) ) {
-			$transient->response[$this->key] = $this->format_response( $status );
+		if ( version_compare( $this->get_current_version(), $remote_data->new_version, '<' ) ) {
+			$transient->response[$this->key] = $this->format_response( $remote_data );
 		}
 
 		return $transient;
 	}
 
 	private function get_remote_data() {
-		if ( $this->update_status ) {
-			return $this->update_status;
+		if ( $this->update_data ) {
+			return $this->update_data;
 		}
 
-		$status = get_site_transient( $this->transient );
+		$data = get_site_transient( $this->transient );
 
-		if ( ! is_object( $status ) ) {
-			$status = $this->call_remote_api();
-			set_site_transient( $this->transient, $status, HOUR_IN_SECONDS );
+		if ( ! is_object( $data ) ) {
+			$data = $this->call_remote_api();
+			set_site_transient( $this->transient, $data, HOUR_IN_SECONDS );
 		}
 
-		$this->update_status = $status;
+		$this->update_data = $data;
 
-		return $status;
+		return $data;
 	}
 
 	private function get_current_version() {
@@ -83,7 +83,7 @@ class External_Updater {
 				require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 			}
 
-			$data = get_plugin_data( $this->fullpath, false, false );
+			$data = get_plugin_data( $this->full_path, false, false );
 			$version = $data['Version'];
 		}
 
@@ -98,7 +98,7 @@ class External_Updater {
 			'type' => $this->type,
 			'slug' => $this->slug
 		);
-		$url = add_query_arg( $request, $this->metadata );
+		$url = add_query_arg( $request, $this->update_url );
 		$options = array( 'timeout' => 10 );
 		$response = wp_remote_get( $url, $options );
 		$code = wp_remote_retrieve_response_code( $response );
