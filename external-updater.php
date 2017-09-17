@@ -137,6 +137,10 @@ class External_Updater {
 			$formatted = (object) $unformatted;
 			$formatted->slug = $this->slug;
 			$formatted->plugin = $this->key;
+			$formatted->version = $unformatted->new_version;
+			$formatted->download_link = $unformatted->package;
+			$formatted->homepage = $unformatted->url;
+			$formatted->sections = (array) $unformatted->sections;
 		}
 
 		return $formatted;
