@@ -52,6 +52,10 @@ class External_Updater {
 	public function set_available_update( $transient ) {
 		$remote_data = $this->get_remote_data();
 
+		if ( isset ( $transient->response[$this->key] ) ) {
+			unset( $transient->response[$this->key] );
+		}
+
 		if ( version_compare( $this->get_current_version(), $remote_data->new_version, '<' ) ) {
 			$transient->response[$this->key] = $this->format_response( $remote_data );
 		}
