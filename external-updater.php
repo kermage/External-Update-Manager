@@ -13,6 +13,7 @@ class External_Updater {
 	private $type;
 	private $slug;
 	private $key;
+	private $name;
 	private $transient = 'external_updater_';
 	private $current_version = '';
 	private $update_data = null;
@@ -45,6 +46,7 @@ class External_Updater {
 			$this->key = $folder_name;
 
 			$data = wp_get_theme( $folder_name );
+			$this->name = $data->get( 'Name' );
 			$this->current_version = $data->get( 'Version' );
 		} else {
 			$this->type = 'plugin';
@@ -55,6 +57,7 @@ class External_Updater {
 			}
 
 			$data = get_plugin_data( $path, false, false );
+			$this->name = $data['Name'];
 			$this->current_version = $data['Version'];
 		}
 	}
@@ -123,6 +126,7 @@ class External_Updater {
 			$formatted['theme'] = $this->slug;
 		} else {
 			$formatted = (object) $unformatted;
+			$formatted->name = $this->name;
 			$formatted->slug = $this->slug;
 			$formatted->plugin = $this->key;
 			$formatted->version = $unformatted->new_version;
