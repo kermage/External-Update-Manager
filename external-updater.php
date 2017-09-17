@@ -129,7 +129,7 @@ class External_Updater {
 		}
 	}
 
-	private function fix_directory_name( $source, $remote_source, $upgrader, $hook_extra = null ) {
+	public function fix_directory_name( $source, $remote_source, $upgrader, $hook_extra = null ) {
 		global $wp_filesystem;
 
 		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] == $this->key ||
