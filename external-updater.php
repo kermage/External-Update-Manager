@@ -24,6 +24,11 @@ class External_Updater {
 		$this->transient .= $this->type . '_' . $this->slug;
 
 		add_filter( 'site_transient_update_' . $this->type . 's', array( $this, 'set_available_update' ) );
+
+		if ( $this->type == 'plugin' ) {
+			add_filter( 'plugins_api', array( $this, 'set_plugin_info' ), 10, 3 );
+		}
+
 		add_filter( 'upgrader_source_selection', array( $this, 'fix_directory_name' ), 10, 4 );
 
 		$this->maybe_delete_transient();
@@ -52,6 +57,16 @@ class External_Updater {
 		}
 
 		return $transient;
+	}
+
+	public function set_plugin_info( $data, $action = '', $args = null ) {
+		if ( $action !== 'plugin_information' || $args->slug !== $this->slug ) {
+			return $data;
+		}
+
+		$remote_data = $this->get_remote_data();
+
+		return $remote_data;
 	}
 
 	private function get_remote_data() {
