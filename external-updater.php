@@ -25,6 +25,7 @@ class External_Updater {
 		$this->transient .= $this->type . '_' . $this->slug;
 
 		add_filter( 'site_transient_update_' . $this->type . 's', array( $this, 'set_available_update' ) );
+		add_filter( 'delete_site_transient_update_' . $this->type . 's', array( $this, 'reset_cached_data' ) );
 
 		if ( $this->type == 'plugin' ) {
 			add_filter( 'plugins_api', array( $this, 'set_plugin_info' ), 10, 3 );
@@ -72,6 +73,13 @@ class External_Updater {
 		if ( version_compare( $this->current_version, $remote_data->new_version, '<' ) ) {
 			$transient->response[$this->key] = $this->format_response( $remote_data );
 		}
+
+		return $transient;
+	}
+
+	public function reset_cached_data( $transient ) {
+		$this->update_data = null;
+		delete_site_transient( $this->transient );
 
 		return $transient;
 	}
