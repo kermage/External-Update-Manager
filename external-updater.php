@@ -24,6 +24,7 @@ class External_Updater {
 		$this->transient .= $this->type . '_' . $this->slug;
 
 		add_filter( 'site_transient_update_' . $this->type . 's', array( $this, 'set_available_update' ) );
+		add_filter( 'upgrader_source_selection', array( $this, 'fix_directory_name' ), 10, 4 );
 
 		$this->maybe_delete_transient();
 	}
@@ -126,6 +127,20 @@ class External_Updater {
 		if ( $GLOBALS['pagenow'] === 'update-core.php' && isset( $_GET['force-check'] ) ) {
 			delete_site_transient( $this->transient );
 		}
+	}
+
+	private function fix_directory_name( $source, $remote_source, $upgrader, $hook_extra = null ) {
+		global $wp_filesystem;
+
+		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] == $this->key ||
+			isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] == $this->key ) {
+			$corrected_source = trailingslashit( $remote_source ) . $this->slug . '/';
+			$wp_filesystem->move( $source, $corrected_source );
+
+			return $corrected_source;
+		}
+
+		return $source;
 	}
 
 }
