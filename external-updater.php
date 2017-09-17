@@ -43,9 +43,19 @@ class External_Updater {
 		if ( file_exists( $folder . '/style.css' ) ) {
 			$this->type = 'theme';
 			$this->key = $folder_name;
+
+			$data = wp_get_theme( $folder_name );
+			$this->current_version = $data->get( 'Version' );
 		} else {
 			$this->type = 'plugin';
 			$this->key = plugin_basename( $path );
+
+			if ( ! function_exists( 'get_plugin_data' ) ) {
+				require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			}
+
+			$data = get_plugin_data( $path, false, false );
+			$this->current_version = $data['Version'];
 		}
 	}
 
@@ -56,7 +66,7 @@ class External_Updater {
 			unset( $transient->response[$this->key] );
 		}
 
-		if ( version_compare( $this->get_current_version(), $remote_data->new_version, '<' ) ) {
+		if ( version_compare( $this->current_version, $remote_data->new_version, '<' ) ) {
 			$transient->response[$this->key] = $this->format_response( $remote_data );
 		}
 
@@ -88,28 +98,6 @@ class External_Updater {
 		$this->update_data = $data;
 
 		return $data;
-	}
-
-	private function get_current_version() {
-		if ( $this->current_version ) {
-			return $this->current_version;
-		}
-
-		if ( $this->type == 'theme' ) {
-			$data = wp_get_theme( $this->slug );
-			$version = $data->get( 'Version' );
-		} else {
-			if ( ! function_exists( 'get_plugin_data' ) ) {
-				require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-			}
-
-			$data = get_plugin_data( $this->full_path, false, false );
-			$version = $data['Version'];
-		}
-
-		$this->current_version = $version;
-
-		return $version;
 	}
 
 	private function call_remote_api() {
