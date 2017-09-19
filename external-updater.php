@@ -159,6 +159,11 @@ class External_Updater {
 		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] == $this->key ||
 			isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] == $this->key ) {
 			$corrected_source = trailingslashit( $remote_source ) . $this->slug . '/';
+
+			if ( $source == $corrected_source ) {
+				return $source;
+			}
+
 			$wp_filesystem->move( $source, $corrected_source );
 
 			return $corrected_source;
