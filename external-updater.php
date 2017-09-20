@@ -102,7 +102,11 @@ class External_Updater {
 		$data = get_site_transient( $this->transient );
 
 		if ( ! is_object( $data ) ) {
-			$data = $this->call_remote_api();
+			$args = array(
+				'type' => $this->type,
+				'slug' => $this->slug
+			);
+			$data = $this->call_remote_api( $args );
 			set_site_transient( $this->transient, $data, HOUR_IN_SECONDS );
 		}
 
@@ -111,12 +115,7 @@ class External_Updater {
 		return $data;
 	}
 
-	private function call_remote_api() {
-		$request = array(
-			'action' => 'update',
-			'type' => $this->type,
-			'slug' => $this->slug
-		);
+	private function call_remote_api( $request ) {
 		$url = add_query_arg( $request, $this->update_url );
 		$options = array( 'timeout' => 10 );
 		$response = wp_remote_get( $url, $options );
