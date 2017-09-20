@@ -5,8 +5,8 @@
  * @since 0.1.0
  */
 
-if ( ! class_exists( 'External_Updater' ) ) :
-class External_Updater {
+if ( ! class_exists( 'External_Update_Manager' ) ) :
+class External_Update_Manager {
 
 	private $full_path;
 	private $update_url;
