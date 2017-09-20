@@ -14,7 +14,7 @@ class External_Update_Manager {
 	private $slug;
 	private $key;
 	private $name;
-	private $transient = 'external_updater_';
+	private $transient = 'eum_';
 	private $current_version = '';
 	private $update_data = null;
 
