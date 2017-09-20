@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package External-Updater
+ * @package External Update Manager
  * @since 0.1.0
  */
 
