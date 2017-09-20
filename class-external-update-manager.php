@@ -14,6 +14,7 @@ class External_Update_Manager {
 	private $slug;
 	private $key;
 	private $name;
+	private $url;
 	private $transient = 'eum_';
 	private $current_version = '';
 	private $update_data = null;
@@ -48,6 +49,7 @@ class External_Update_Manager {
 
 			$data = wp_get_theme( $folder_name );
 			$this->name = $data->get( 'Name' );
+			$this->url = $data->get( 'ThemeURI' );
 			$this->current_version = $data->get( 'Version' );
 		} else {
 			$this->type = 'plugin';
@@ -59,6 +61,7 @@ class External_Update_Manager {
 
 			$data = get_plugin_data( $path, false, false );
 			$this->name = $data['Name'];
+			$this->url = $data['PluginURI'];
 			$this->current_version = $data['Version'];
 		}
 	}
@@ -131,9 +134,11 @@ class External_Update_Manager {
 		if ( $this->type == 'theme' ) {
 			$formatted = (array) $unformatted;
 			$formatted['theme'] = $this->slug;
+			$formatted['url'] = $this->url;
 		} else {
 			$formatted = (object) $unformatted;
 			$formatted->name = $this->name;
+			$formatted->url = $this->url;
 			$formatted->slug = $this->slug;
 			$formatted->plugin = $this->key;
 			$formatted->version = $unformatted->new_version;
