@@ -164,9 +164,14 @@ class External_Updater {
 				return $source;
 			}
 
-			$wp_filesystem->move( $source, $corrected_source );
-
-			return $corrected_source;
+			if ( $wp_filesystem->move( $source, $corrected_source ) ) {
+				return $corrected_source;
+			} else {
+				return new WP_Error(
+					'rename-failed',
+					'Unable to rename the update to match the existing directory.'
+				);
+			}
 		}
 
 		return $source;
