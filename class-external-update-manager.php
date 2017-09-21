@@ -15,8 +15,8 @@ class External_Update_Manager {
 	private $item_key;
 	private $item_name;
 	private $item_url;
+	private $item_version = '';
 	private $transient = 'eum_';
-	private $current_version = '';
 	private $update_data = null;
 
 	public function __construct( $full_path, $update_url ) {
@@ -50,7 +50,7 @@ class External_Update_Manager {
 			$data = wp_get_theme( $folder_name );
 			$this->item_name = $data->get( 'Name' );
 			$this->item_url = $data->get( 'ThemeURI' );
-			$this->current_version = $data->get( 'Version' );
+			$this->item_version = $data->get( 'Version' );
 		} else {
 			$this->item_type = 'plugin';
 			$this->item_key = plugin_basename( $path );
@@ -62,7 +62,7 @@ class External_Update_Manager {
 			$data = get_plugin_data( $path, false, false );
 			$this->item_name = $data['Name'];
 			$this->item_url = $data['PluginURI'];
-			$this->current_version = $data['Version'];
+			$this->item_version = $data['Version'];
 		}
 	}
 
@@ -73,7 +73,7 @@ class External_Update_Manager {
 			unset( $transient->response[$this->item_key] );
 		}
 
-		if ( version_compare( $this->current_version, $remote_data->new_version, '<' ) ) {
+		if ( version_compare( $this->item_version, $remote_data->new_version, '<' ) ) {
 			$transient->response[$this->item_key] = $this->format_response( $remote_data );
 		}
 
