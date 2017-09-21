@@ -10,11 +10,11 @@ class External_Update_Manager {
 
 	private $full_path;
 	private $update_url;
-	private $type;
-	private $slug;
-	private $key;
-	private $name;
-	private $url;
+	private $item_type;
+	private $item_slug;
+	private $item_key;
+	private $item_name;
+	private $item_url;
 	private $transient = 'eum_';
 	private $current_version = '';
 	private $update_data = null;
@@ -23,12 +23,12 @@ class External_Update_Manager {
 		$this->full_path = $full_path;
 		$this->update_url = $update_url;
 		$this->get_file_details( $full_path );
-		$this->transient .= $this->type . '_' . $this->slug;
+		$this->transient .= $this->item_type . '_' . $this->item_slug;
 
-		add_filter( 'site_transient_update_' . $this->type . 's', array( $this, 'set_available_update' ) );
-		add_filter( 'delete_site_transient_update_' . $this->type . 's', array( $this, 'reset_cached_data' ) );
+		add_filter( 'site_transient_update_' . $this->item_type . 's', array( $this, 'set_available_update' ) );
+		add_filter( 'delete_site_transient_update_' . $this->item_type . 's', array( $this, 'reset_cached_data' ) );
 
-		if ( $this->type == 'plugin' ) {
+		if ( $this->item_type == 'plugin' ) {
 			add_filter( 'plugins_api', array( $this, 'set_plugin_info' ), 10, 3 );
 		}
 
@@ -41,27 +41,27 @@ class External_Update_Manager {
 		$folder = dirname( $path );
 		$folder_name = basename( $folder );
 
-		$this->slug = $folder_name;
+		$this->item_slug = $folder_name;
 
 		if ( file_exists( $folder . '/style.css' ) ) {
-			$this->type = 'theme';
-			$this->key = $folder_name;
+			$this->item_type = 'theme';
+			$this->item_key = $folder_name;
 
 			$data = wp_get_theme( $folder_name );
-			$this->name = $data->get( 'Name' );
-			$this->url = $data->get( 'ThemeURI' );
+			$this->item_name = $data->get( 'Name' );
+			$this->item_url = $data->get( 'ThemeURI' );
 			$this->current_version = $data->get( 'Version' );
 		} else {
-			$this->type = 'plugin';
-			$this->key = plugin_basename( $path );
+			$this->item_type = 'plugin';
+			$this->item_key = plugin_basename( $path );
 
 			if ( ! function_exists( 'get_plugin_data' ) ) {
 				require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 			}
 
 			$data = get_plugin_data( $path, false, false );
-			$this->name = $data['Name'];
-			$this->url = $data['PluginURI'];
+			$this->item_name = $data['Name'];
+			$this->item_url = $data['PluginURI'];
 			$this->current_version = $data['Version'];
 		}
 	}
@@ -69,12 +69,12 @@ class External_Update_Manager {
 	public function set_available_update( $transient ) {
 		$remote_data = $this->get_remote_data();
 
-		if ( isset ( $transient->response[$this->key] ) ) {
-			unset( $transient->response[$this->key] );
+		if ( isset ( $transient->response[$this->item_key] ) ) {
+			unset( $transient->response[$this->item_key] );
 		}
 
 		if ( version_compare( $this->current_version, $remote_data->new_version, '<' ) ) {
-			$transient->response[$this->key] = $this->format_response( $remote_data );
+			$transient->response[$this->item_key] = $this->format_response( $remote_data );
 		}
 
 		return $transient;
@@ -88,7 +88,7 @@ class External_Update_Manager {
 	}
 
 	public function set_plugin_info( $data, $action = '', $args = null ) {
-		if ( $action !== 'plugin_information' || $args->slug !== $this->slug ) {
+		if ( $action !== 'plugin_information' || $args->slug !== $this->item_slug ) {
 			return $data;
 		}
 
@@ -106,8 +106,8 @@ class External_Update_Manager {
 
 		if ( ! is_object( $data ) ) {
 			$args = array(
-				'type' => $this->type,
-				'slug' => $this->slug
+				'type' => $this->item_type,
+				'slug' => $this->item_slug
 			);
 			$data = $this->call_remote_api( $args );
 			set_site_transient( $this->transient, $data, HOUR_IN_SECONDS );
@@ -131,16 +131,16 @@ class External_Update_Manager {
 	}
 
 	private function format_response( $unformatted ) {
-		if ( $this->type == 'theme' ) {
+		if ( $this->item_type == 'theme' ) {
 			$formatted = (array) $unformatted;
-			$formatted['theme'] = $this->slug;
-			$formatted['url'] = $this->url;
+			$formatted['theme'] = $this->item_slug;
+			$formatted['url'] = $this->item_url;
 		} else {
 			$formatted = (object) $unformatted;
-			$formatted->name = $this->name;
-			$formatted->url = $this->url;
-			$formatted->slug = $this->slug;
-			$formatted->plugin = $this->key;
+			$formatted->name = $this->item_name;
+			$formatted->url = $this->item_url;
+			$formatted->slug = $this->item_slug;
+			$formatted->plugin = $this->item_key;
 			$formatted->version = $unformatted->new_version;
 			$formatted->download_link = $unformatted->package;
 			$formatted->author = sprintf( '<a href="%s">%s</a>', $unformatted->author_url, $unformatted->author );
@@ -159,9 +159,9 @@ class External_Update_Manager {
 	public function fix_directory_name( $source, $remote_source, $upgrader, $hook_extra = null ) {
 		global $wp_filesystem;
 
-		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] == $this->key ||
-			isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] == $this->key ) {
-			$corrected_source = trailingslashit( $remote_source ) . $this->slug . '/';
+		if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] == $this->item_key ||
+			isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] == $this->item_key ) {
+			$corrected_source = trailingslashit( $remote_source ) . $this->item_slug . '/';
 
 			if ( $source == $corrected_source ) {
 				return $source;
