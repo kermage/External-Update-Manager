@@ -7,10 +7,18 @@
  * non-GPL licensed...custom-made...commercial...etc.
  *
  * @package External Update Manager
- * @since 0.1.0
+ * @link    https://github.com/kermage/External-Update-Manager
+ * @author  Gene Alyson Fortunado Torcende
+ * @version 1.0.0
+ * @license GPL-3.0
  */
 
 if ( ! class_exists( 'External_Update_Manager' ) ) :
+
+/**
+ * @package External Update Manager
+ * @since   0.1.0
+ */
 class External_Update_Manager {
 
 	private $full_path;
