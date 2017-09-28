@@ -3,6 +3,10 @@
 
 *self-hosted...can't be submitted to official WordPress repository...non-GPL licensed...custom-made...commercial...etc.*
 
+## Requirements
+* PHP 5.2.4+
+* WordPress 4.4.0+
+
 ## Installation
 1. Grab the `class-external-update-manager.php` file and place it somewhere inside the theme or plugin directory
 2. Add a `require_once` call in the theme's `functions.php` or in the plugin's `main php file` referencing the class file
