@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * A drop-in library for WordPress themes or plugins to manage updates
+ *
+ * self-hosted...can't be submitted to official WordPress repository...
+ * non-GPL licensed...custom-made...commercial...etc.
+ *
  * @package External Update Manager
  * @since 0.1.0
  */
