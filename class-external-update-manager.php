@@ -27,7 +27,6 @@ class External_Update_Manager {
 	private $item_slug;
 	private $item_key;
 	private $item_name;
-	private $item_url;
 	private $item_version = '';
 	private $transient = 'eum_';
 	private $update_data = null;
@@ -62,7 +61,6 @@ class External_Update_Manager {
 
 			$data = wp_get_theme( $folder_name );
 			$this->item_name = $data->get( 'Name' );
-			$this->item_url = $data->get( 'ThemeURI' );
 			$this->item_version = $data->get( 'Version' );
 		} else {
 			$this->item_type = 'plugin';
@@ -74,7 +72,6 @@ class External_Update_Manager {
 
 			$data = get_plugin_data( $path, false, false );
 			$this->item_name = $data['Name'];
-			$this->item_url = $data['PluginURI'];
 			$this->item_version = $data['Version'];
 		}
 	}
@@ -147,15 +144,14 @@ class External_Update_Manager {
 		if ( $this->item_type == 'theme' ) {
 			$formatted = (array) $unformatted;
 			$formatted['theme'] = $this->item_slug;
-			$formatted['url'] = $this->item_url;
 		} else {
 			$formatted = (object) $unformatted;
 			$formatted->name = $this->item_name;
-			$formatted->url = $this->item_url;
 			$formatted->slug = $this->item_slug;
 			$formatted->plugin = $this->item_key;
 			$formatted->version = $unformatted->new_version;
 			$formatted->download_link = $unformatted->package;
+			$formatted->homepage = $unformatted->url;
 			$formatted->author = sprintf( '<a href="%s">%s</a>', $unformatted->author_url, $unformatted->author );
 			$formatted->sections = (array) $unformatted->sections;
 		}
