@@ -83,7 +83,7 @@ class External_Update_Manager {
 			return $transient;
 		}
 
-		if ( isset ( $transient->response[$this->item_key] ) ) {
+		if ( isset( $transient->response[$this->item_key] ) ) {
 			unset( $transient->response[$this->item_key] );
 		}
 
