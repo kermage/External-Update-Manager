@@ -79,6 +79,10 @@ class External_Update_Manager {
 	public function set_available_update( $transient ) {
 		$remote_data = $this->get_remote_data();
 
+		if ( ! is_object( $remote_data ) ) {
+			return $transient;
+		}
+
 		if ( isset ( $transient->response[$this->item_key] ) ) {
 			unset( $transient->response[$this->item_key] );
 		}
