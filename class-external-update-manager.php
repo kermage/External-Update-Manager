@@ -156,7 +156,7 @@ class External_Update_Manager {
 			$formatted->version = $unformatted->new_version;
 			$formatted->download_link = $unformatted->package;
 			$formatted->homepage = $unformatted->url;
-			$formatted->author = sprintf( '<a href="%s">%s</a>', $unformatted->author_url, $unformatted->author );
+			$formatted->author = sprintf( '<a href="%s">%s</a>', $unformatted->author_url, $unformatted->author_name );
 			$formatted->sections = (array) $unformatted->sections;
 		}
 
