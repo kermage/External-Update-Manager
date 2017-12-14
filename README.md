@@ -16,3 +16,7 @@
 require_once( 'class-external-update-manager.php' );
 new External_Update_Manager( __FILE__, '<UPDATE URL>' );
 ```
+
+## Working Example
+
+* (ThemePlate)[https://github.com/kermage/ThemePlate]
