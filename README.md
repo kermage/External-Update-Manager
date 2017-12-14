@@ -19,4 +19,4 @@ new External_Update_Manager( __FILE__, '<UPDATE URL>' );
 
 ## Working Example
 
-* (ThemePlate)[https://github.com/kermage/ThemePlate]
+* [ThemePlate](https://github.com/kermage/ThemePlate)
