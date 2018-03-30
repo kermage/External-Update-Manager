@@ -67,7 +67,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 				$this->item_key = plugin_basename( $path );
 
 				if ( ! function_exists( 'get_plugin_data' ) ) {
-					require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+					require_once ABSPATH . 'wp-admin/includes/plugin.php' ;
 				}
 
 				$data = get_plugin_data( $path, false, false );
