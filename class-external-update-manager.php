@@ -40,7 +40,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			add_filter( 'site_transient_update_' . $this->item_type . 's', array( $this, 'set_available_update' ) );
 			add_filter( 'delete_site_transient_update_' . $this->item_type . 's', array( $this, 'reset_cached_data' ) );
 
-			if ( $this->item_type == 'plugin' ) {
+			if ( $this->item_type === 'plugin' ) {
 				add_filter( 'plugins_api', array( $this, 'set_plugin_info' ), 10, 3 );
 			}
 
@@ -145,7 +145,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		private function format_response( $unformatted ) {
-			if ( $this->item_type == 'theme' ) {
+			if ( $this->item_type === 'theme' ) {
 				$formatted = (array) $unformatted;
 				$formatted['theme'] = $this->item_slug;
 			} else {
@@ -172,11 +172,11 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		public function fix_directory_name( $source, $remote_source, $upgrader, $hook_extra = null ) {
 			global $wp_filesystem;
 
-			if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] == $this->item_key ||
-				isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] == $this->item_key ) {
+			if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $this->item_key ||
+				isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] === $this->item_key ) {
 				$corrected_source = trailingslashit( $remote_source ) . $this->item_slug . '/';
 
-				if ( $source == $corrected_source ) {
+				if ( $source === $corrected_source ) {
 					return $source;
 				}
 
