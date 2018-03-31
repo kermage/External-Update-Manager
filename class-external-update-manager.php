@@ -110,7 +110,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 
 			$remote_data = $this->get_remote_data();
 
-			return $remote_data;
+			return $this->format_response( $remote_data );
 		}
 
 		private function get_remote_data() {
