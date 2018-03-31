@@ -85,12 +85,12 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 				return $transient;
 			}
 
-			if ( isset( $transient->response[$this->item_key] ) ) {
-				unset( $transient->response[$this->item_key] );
+			if ( isset( $transient->response[ $this->item_key ] ) ) {
+				unset( $transient->response[ $this->item_key ] );
 			}
 
 			if ( version_compare( $this->item_version, $remote_data->new_version, '<' ) ) {
-				$transient->response[$this->item_key] = $this->format_response( $remote_data );
+				$transient->response[ $this->item_key ] = $this->format_response( $remote_data );
 			}
 
 			return $transient;
