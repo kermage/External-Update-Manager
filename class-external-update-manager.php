@@ -30,6 +30,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		private $item_version = '';
 		private $transient    = 'eum_';
 		private $update_data  = null;
+		private $has_update   = false;
 
 		public function __construct( $full_path, $update_url ) {
 			$this->full_path  = $full_path;
@@ -92,6 +93,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 
 			if ( version_compare( $this->item_version, $remote_data->new_version, '<' ) ) {
 				$transient->response[ $this->item_key ] = $this->format_response( $remote_data );
+				$this->has_update = true;
 			}
 
 			return $transient;
@@ -116,6 +118,10 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 
 		public function add_view_details( $meta, $file ) {
 			if ( $file !== $this->item_key ) {
+				return $meta;
+			}
+
+			if ( $this->has_update ) {
 				return $meta;
 			}
 
