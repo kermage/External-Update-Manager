@@ -42,6 +42,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 
 			if ( 'plugin' === $this->item_type ) {
 				add_filter( 'plugins_api', array( $this, 'set_plugin_info' ), 10, 3 );
+				add_filter( 'plugin_row_meta', array( $this, 'add_view_details' ), 10, 2 );
 			}
 
 			add_filter( 'upgrader_source_selection', array( $this, 'fix_directory_name' ), 10, 4 );
@@ -111,6 +112,24 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			$remote_data = $this->get_remote_data();
 
 			return $this->format_response( $remote_data );
+		}
+
+		public function add_view_details( $meta, $file ) {
+			if ( $file !== $this->item_key ) {
+				return $meta;
+			}
+
+			$url  = 'plugin-install.php?tab=plugin-information&plugin=' . urlencode( $this->item_slug ) . '&TB_iframe=true';
+			$link = sprintf(
+				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">View details</a>',
+				esc_url( network_admin_url( $url ) ),
+				esc_attr( sprintf( __( 'More information about %s' ), $this->item_name ) ),
+				esc_attr( $this->item_name )
+			);
+
+			$meta[] = $link;
+
+			return $meta;
 		}
 
 		private function get_remote_data() {
