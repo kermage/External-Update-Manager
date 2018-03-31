@@ -28,11 +28,11 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		private $item_key;
 		private $item_name;
 		private $item_version = '';
-		private $transient = 'eum_';
-		private $update_data = null;
+		private $transient    = 'eum_';
+		private $update_data  = null;
 
 		public function __construct( $full_path, $update_url ) {
-			$this->full_path = $full_path;
+			$this->full_path  = $full_path;
 			$this->update_url = $update_url;
 			$this->get_file_details( $full_path );
 			$this->transient .= $this->item_type . '_' . $this->item_slug;
@@ -50,28 +50,30 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		private function get_file_details( $path ) {
-			$folder = dirname( $path );
+			$folder      = dirname( $path );
 			$folder_name = basename( $folder );
 
 			$this->item_slug = $folder_name;
 
 			if ( file_exists( $folder . '/style.css' ) ) {
 				$this->item_type = 'theme';
-				$this->item_key = $folder_name;
+				$this->item_key  = $folder_name;
 
 				$data = wp_get_theme( $folder_name );
-				$this->item_name = $data->get( 'Name' );
+
+				$this->item_name    = $data->get( 'Name' );
 				$this->item_version = $data->get( 'Version' );
 			} else {
 				$this->item_type = 'plugin';
-				$this->item_key = plugin_basename( $path );
+				$this->item_key  = plugin_basename( $path );
 
 				if ( ! function_exists( 'get_plugin_data' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/plugin.php';
 				}
 
 				$data = get_plugin_data( $path, false, false );
-				$this->item_name = $data['Name'];
+
+				$this->item_name    = $data['Name'];
 				$this->item_version = $data['Version'];
 			}
 		}
@@ -133,11 +135,11 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		private function call_remote_api( $request ) {
-			$url = add_query_arg( $request, $this->update_url );
-			$options = array( 'timeout' => 10 );
+			$url      = add_query_arg( $request, $this->update_url );
+			$options  = array( 'timeout' => 10 );
 			$response = wp_remote_get( $url, $options );
-			$code = wp_remote_retrieve_response_code( $response );
-			$body = wp_remote_retrieve_body( $response );
+			$code     = wp_remote_retrieve_response_code( $response );
+			$body     = wp_remote_retrieve_body( $response );
 
 			if ( $code === 200 ) {
 				return json_decode( $body );
@@ -147,17 +149,19 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		private function format_response( $unformatted ) {
 			if ( $this->item_type === 'theme' ) {
 				$formatted = (array) $unformatted;
+
 				$formatted['theme'] = $this->item_slug;
 			} else {
 				$formatted = (object) $unformatted;
-				$formatted->name = $this->item_name;
-				$formatted->slug = $this->item_slug;
-				$formatted->plugin = $this->item_key;
-				$formatted->version = $unformatted->new_version;
+
+				$formatted->name          = $this->item_name;
+				$formatted->slug          = $this->item_slug;
+				$formatted->plugin        = $this->item_key;
+				$formatted->version       = $unformatted->new_version;
 				$formatted->download_link = $unformatted->package;
-				$formatted->homepage = $unformatted->url;
-				$formatted->author = sprintf( '<a href="%s">%s</a>', $unformatted->author_url, $unformatted->author_name );
-				$formatted->sections = (array) $unformatted->sections;
+				$formatted->homepage      = $unformatted->url;
+				$formatted->author        = sprintf( '<a href="%s">%s</a>', $unformatted->author_url, $unformatted->author_name );
+				$formatted->sections      = (array) $unformatted->sections;
 			}
 
 			return $formatted;
