@@ -40,7 +40,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			add_filter( 'site_transient_update_' . $this->item_type . 's', array( $this, 'set_available_update' ) );
 			add_filter( 'delete_site_transient_update_' . $this->item_type . 's', array( $this, 'reset_cached_data' ) );
 
-			if ( $this->item_type === 'plugin' ) {
+			if ( 'plugin' === $this->item_type ) {
 				add_filter( 'plugins_api', array( $this, 'set_plugin_info' ), 10, 3 );
 			}
 
@@ -104,7 +104,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		public function set_plugin_info( $data, $action = '', $args = null ) {
-			if ( $action !== 'plugin_information' || $args->slug !== $this->item_slug ) {
+			if ( 'plugin_information' !== $action || $args->slug !== $this->item_slug ) {
 				return $data;
 			}
 
@@ -141,13 +141,13 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			$code     = wp_remote_retrieve_response_code( $response );
 			$body     = wp_remote_retrieve_body( $response );
 
-			if ( $code === 200 ) {
+			if ( 200 === $code ) {
 				return json_decode( $body );
 			}
 		}
 
 		private function format_response( $unformatted ) {
-			if ( $this->item_type === 'theme' ) {
+			if ( 'theme' === $this->item_type ) {
 				$formatted = (array) $unformatted;
 
 				$formatted['theme'] = $this->item_slug;
@@ -168,7 +168,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		private function maybe_delete_transient() {
-			if ( $GLOBALS['pagenow'] === 'update-core.php' && isset( $_GET['force-check'] ) ) {
+			if ( 'update-core.php' === $GLOBALS['pagenow'] && isset( $_GET['force-check'] ) ) {
 				delete_site_transient( $this->transient );
 			}
 		}
