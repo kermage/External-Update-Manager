@@ -123,7 +123,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			if ( ! is_object( $data ) ) {
 				$args = array(
 					'type' => $this->item_type,
-					'slug' => $this->item_slug
+					'slug' => $this->item_slug,
 				);
 				$data = $this->call_remote_api( $args );
 				set_site_transient( $this->transient, $data, HOUR_IN_SECONDS );
