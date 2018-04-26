@@ -187,6 +187,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 				$formatted->homepage      = $unformatted->url;
 				$formatted->author        = sprintf( '<a href="%s">%s</a>', $unformatted->author_url, $unformatted->author_name );
 				$formatted->sections      = (array) $unformatted->sections;
+				$formatted->banners       = (array) $unformatted->banners;
 			}
 
 			return $formatted;
