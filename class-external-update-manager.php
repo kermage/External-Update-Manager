@@ -125,7 +125,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 				return $meta;
 			}
 
-			$url  = 'plugin-install.php?tab=plugin-information&plugin=' . urlencode( $this->item_slug ) . '&TB_iframe=true';
+			$url  = 'plugin-install.php?tab=plugin-information&plugin=' . rawurlencode( $this->item_slug ) . '&TB_iframe=true';
 			$link = sprintf(
 				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">View details</a>',
 				esc_url( network_admin_url( $url ) ),
