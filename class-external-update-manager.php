@@ -93,6 +93,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 
 			if ( version_compare( $this->item_version, $remote_data->new_version, '<' ) ) {
 				$transient->response[ $this->item_key ] = $this->format_response( $remote_data );
+
 				$this->has_update = true;
 			}
 
@@ -169,6 +170,8 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			if ( 200 === $code ) {
 				return json_decode( $body );
 			}
+
+			return false;
 		}
 
 		private function format_response( $unformatted ) {
