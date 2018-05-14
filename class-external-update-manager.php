@@ -194,6 +194,10 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 				if ( ! empty( $unformatted->banners ) ) {
 					$formatted->banners = (array) $unformatted->banners;
 				}
+
+				if ( ! empty( $unformatted->icons ) ) {
+					$formatted->icons = (array) $unformatted->icons;
+				}
 			}
 
 			return $formatted;
