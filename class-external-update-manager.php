@@ -204,7 +204,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		private function maybe_delete_transient() {
-			if ( 'update-core.php' === $GLOBALS['pagenow'] && isset( $_GET['force-check'] ) ) {
+			if ( 'update-core.php' === $GLOBALS['pagenow'] && isset( $_GET['force-check'] ) ) { // WPCS: CSRF ok.
 				delete_site_transient( $this->transient );
 			}
 		}
