@@ -130,6 +130,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			$link = sprintf(
 				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">View details</a>',
 				esc_url( network_admin_url( $url ) ),
+				/* translators: %s: plugin name */
 				esc_attr( sprintf( __( 'More information about %s' ), $this->item_name ) ),
 				esc_attr( $this->item_name )
 			);
