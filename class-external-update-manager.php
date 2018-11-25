@@ -166,7 +166,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			$options  = array( 'timeout' => 10 );
 			$response = wp_remote_get( $url, $options );
 
-			if ( is_wp_error( $response ) ) {
+			if ( is_wp_error( $response ) || ! is_array( $response ) ) {
 				return false;
 			}
 
