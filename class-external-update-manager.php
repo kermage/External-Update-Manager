@@ -170,8 +170,8 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 				return false;
 			}
 
-			$code     = wp_remote_retrieve_response_code( $response );
-			$body     = wp_remote_retrieve_body( $response );
+			$code = wp_remote_retrieve_response_code( $response );
+			$body = wp_remote_retrieve_body( $response );
 
 			if ( 200 === $code ) {
 				return json_decode( $body );
