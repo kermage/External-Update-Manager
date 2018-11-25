@@ -218,8 +218,8 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		public function fix_directory_name( $source, $remote_source, $upgrader, $hook_extra = null ) {
 			global $wp_filesystem;
 
-			if ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $this->item_key ||
-				isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] === $this->item_key ) {
+			if ( ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $this->item_key ) ||
+				( isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] === $this->item_key ) ) {
 				$corrected_source = trailingslashit( $remote_source ) . $this->item_slug . '/';
 
 				if ( $source === $corrected_source ) {
