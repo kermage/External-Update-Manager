@@ -165,6 +165,11 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			$url      = add_query_arg( $request, $this->update_url );
 			$options  = array( 'timeout' => 10 );
 			$response = wp_remote_get( $url, $options );
+
+			if ( is_wp_error( $response ) ) {
+				return false;
+			}
+
 			$code     = wp_remote_retrieve_response_code( $response );
 			$body     = wp_remote_retrieve_body( $response );
 
