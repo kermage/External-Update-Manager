@@ -241,6 +241,14 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		public function show_update_message() {
+			global $pagenow;
+
+			if ( 'update-core.php' === $pagenow ||
+				( 'theme' === $this->item_type && 'themes.php' === $pagenow ) ||
+				( 'plugin' === $this->item_type && 'plugins.php' === $pagenow ) ) {
+				return false;
+			}
+
 			$remote_data = $this->get_remote_data();
 
 			if ( version_compare( $this->item_version, $remote_data->new_version, '>=' ) ) {
