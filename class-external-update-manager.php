@@ -247,9 +247,11 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 				return false;
 			}
 
-			echo '<div class="notice notice-info"><p><strong>';
+			echo '<div class="notice notice-info is-dismissible"><p><strong>';
 			printf( __( 'There is a new version of %1$s available.' ), $this->item_name );
-			echo '</strong></p></div>';
+			echo '</strong></p>';
+			echo '<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>';
+			echo '</div>';
 		}
 
 	}
