@@ -47,6 +47,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			}
 
 			add_filter( 'upgrader_source_selection', array( $this, 'fix_directory_name' ), 10, 4 );
+			add_action( 'admin_notices', array( $this, 'show_update_message' ) );
 
 			$this->maybe_delete_transient();
 		}
@@ -237,6 +238,18 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			}
 
 			return $source;
+		}
+
+		public function show_update_message() {
+			$remote_data = $this->get_remote_data();
+
+			if ( version_compare( $this->item_version, $remote_data->new_version, '>=' ) ) {
+				return false;
+			}
+
+			echo '<div class="notice notice-info"><p><strong>';
+			printf( __( 'There is a new version of %1$s available.' ), $this->item_name );
+			echo '</strong></p></div>';
 		}
 
 	}
