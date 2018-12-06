@@ -251,6 +251,10 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 
 			$remote_data = $this->get_remote_data();
 
+			if ( ! is_object( $remote_data ) ) {
+				return false;
+			}
+
 			if ( version_compare( $this->item_version, $remote_data->new_version, '>=' ) ) {
 				return false;
 			}
