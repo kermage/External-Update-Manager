@@ -260,7 +260,8 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			}
 
 			echo '<div class="notice notice-info is-dismissible"><p><strong>';
-			printf( __( 'There is a new version of %1$s available.' ), $this->item_name );
+			/* translators: %s: theme/plugin name */
+			echo esc_html( sprintf( __( 'There is a new version of %1$s available.' ), $this->item_name ) );
 			echo '</strong></p>';
 			echo '<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>';
 			echo '</div>';
