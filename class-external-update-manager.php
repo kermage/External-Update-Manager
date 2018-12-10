@@ -260,9 +260,45 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 				return false;
 			}
 
+			wp_enqueue_script( 'plugin-install' );
+
+			if ( 'theme' === $this->item_type ) {
+				$details_args = array( 'TB_iframe' => 'true' );
+				$details_url  = $remote_data->url;
+			} else {
+				$details_args = array(
+					'tab'       => 'plugin-information',
+					'plugin'    => $this->item_slug,
+					'section'   => 'changelog',
+					'TB_iframe' => 'true',
+				);
+				$details_url  = self_admin_url( 'plugin-install.php' );
+			}
+
+			$details_url = add_query_arg( $details_args, $details_url );
+			$update_args = array(
+				'action'         => 'upgrade-' . $this->item_type,
+				$this->item_type => rawurlencode( $this->item_key ),
+				'_wpnonce'       => wp_create_nonce( 'upgrade-' . $this->item_type . '_' . $this->item_key ),
+			);
+			$update_url  = add_query_arg( $update_args, self_admin_url( 'update.php' ) );
+
 			echo '<div class="notice notice-info is-dismissible"><p><strong>';
-			/* translators: %s: theme/plugin name */
-			echo esc_html( sprintf( __( 'There is a new version of %1$s available.' ), $this->item_name ) );
+			/* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number, 5: update URL, 6: additional link attributes */
+			printf( __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="%5$s" %6$s>update now</a>.' ),
+				$this->item_name,
+				esc_url( $details_url ),
+				sprintf( 'class="thickbox open-plugin-details-modal" aria-label="%s"',
+					/* translators: 1: plugin name, 2: version number */
+					esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $this->item_name, $remote_data->new_version ) )
+				),
+				$remote_data->new_version,
+				esc_url( $update_url ),
+				sprintf( 'class="update-link" aria-label="%s"',
+					/* translators: %s: plugin name */
+					esc_attr( sprintf( __( 'Update %s now' ), $this->item_name ) )
+				)
+			);
 			echo '</strong></p>';
 			echo '<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>';
 			echo '</div>';
