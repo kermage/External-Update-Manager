@@ -299,9 +299,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 					esc_attr( sprintf( __( 'Update %s now' ), $this->item_name ) )
 				)
 			);
-			echo '</strong></p>';
-			echo '<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>';
-			echo '</div>';
+			echo '</strong></p></div>';
 		}
 
 		public function plugin_update_message( $plugin_data, $response ) {
