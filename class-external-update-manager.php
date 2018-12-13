@@ -44,7 +44,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			if ( 'plugin' === $this->item_type ) {
 				add_filter( 'plugins_api', array( $this, 'set_plugin_info' ), 10, 3 );
 				add_filter( 'plugin_row_meta', array( $this, 'add_view_details' ), 10, 2 );
-				add_action( 'in_plugin_update_message-' . $this->item_key, array( $this, 'plugin_update_message' ), 10, 2 );
+				add_action( 'in_plugin_update_message-' . $this->item_key, array( $this, 'plugin_update_message' ) );
 			}
 
 			add_filter( 'upgrader_source_selection', array( $this, 'fix_directory_name' ), 10, 4 );
@@ -302,7 +302,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			echo '</strong></p></div>';
 		}
 
-		public function plugin_update_message( $plugin_data, $response ) {
+		public function plugin_update_message( $plugin_data ) {
 			if ( ! empty( $plugin_data['upgrade_notice'] ) ) {
 				echo '<br>' . esc_html( $plugin_data['upgrade_notice'] );
 			}
