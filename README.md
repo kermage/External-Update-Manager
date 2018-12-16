@@ -1,4 +1,4 @@
-# External Update Manager --
+# External Update Manager -- ![Scrutinizer Build Status](https://scrutinizer-ci.com/g/kermage/External-Update-Manager/badges/build.png) ![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/kermage/External-Update-Manager/badges/quality-score.png)
 > *"A drop-in library for WordPress themes or plugins to manage updates."*
 
 *self-hosted...can't be submitted to official WordPress repository...non-GPL licensed...custom-made...commercial...etc.*
@@ -17,6 +17,7 @@ require_once( 'class-external-update-manager.php' );
 new External_Update_Manager( __FILE__, '<UPDATE URL>' );
 ```
 
-## Working Example
+## Working Examples
 
 * [ThemePlate](https://github.com/kermage/ThemePlate)
+* [Augment Types](https://github.com/kermage/augment-types)
