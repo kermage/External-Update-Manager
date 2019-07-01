@@ -22,13 +22,13 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 	class External_Update_Manager {
 
 		private $update_url;
+		private $update_data;
 		private $item_type;
 		private $item_slug;
 		private $item_key;
 		private $item_name;
 		private $item_version = '';
 		private $transient    = 'eum_';
-		private $update_data  = null;
 		private $has_update   = false;
 
 		public function __construct( $full_path, $update_url ) {
