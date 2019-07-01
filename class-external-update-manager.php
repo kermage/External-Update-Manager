@@ -21,7 +21,6 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 	 */
 	class External_Update_Manager {
 
-		private $full_path;
 		private $update_url;
 		private $item_type;
 		private $item_slug;
@@ -33,7 +32,6 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		private $has_update   = false;
 
 		public function __construct( $full_path, $update_url ) {
-			$this->full_path  = $full_path;
 			$this->update_url = $update_url;
 			$this->get_file_details( $full_path );
 			$this->transient .= $this->item_type . '_' . $this->item_slug;
