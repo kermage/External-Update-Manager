@@ -48,7 +48,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			}
 
 			add_filter( 'upgrader_source_selection', array( $this, 'fix_directory_name' ), 10, 4 );
-			add_action( 'admin_notices', array( $this, 'show_update_message' ) );
+			add_action( 'plugins_loaded', array( $this, 'do_notices' ) );
 
 			$this->maybe_delete_transient();
 		}
@@ -239,6 +239,12 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			}
 
 			return $source;
+		}
+
+		public function do_notices() {
+			if ( is_super_admin() ) {
+				add_action( 'admin_notices', array( $this, 'show_update_message' ) );
+			}
 		}
 
 		public function show_update_message() {
