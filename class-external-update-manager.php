@@ -210,7 +210,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		private function maybe_delete_transient() {
-			if ( isset( $_GET['force-check'] ) && 'update-core.php' === $GLOBALS['pagenow'] ) { // WPCS: CSRF ok.
+			if ( isset( $_GET['force-check'] ) && 'update-core.php' === $GLOBALS['pagenow'] ) { // phpcs:ignore WordPress.Security.NonceVerification
 				delete_site_transient( $this->transient );
 			}
 		}
@@ -287,6 +287,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			);
 			$update_url  = add_query_arg( $update_args, self_admin_url( 'update.php' ) );
 
+			/* phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped */
 			echo '<div class="notice notice-info is-dismissible"><p><strong>';
 			/* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number, 5: update URL, 6: additional link attributes */
 			printf( __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="%5$s" %6$s>update now</a>.' ),
@@ -304,6 +305,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 				)
 			);
 			echo '</strong></p></div>';
+			/* phpcs:enable */
 		}
 
 		public function plugin_update_message( $plugin_data ) {
