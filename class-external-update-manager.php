@@ -228,12 +228,12 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 
 				if ( $wp_filesystem->move( $source, $corrected_source ) ) {
 					return $corrected_source;
-				} else {
-					return new WP_Error(
-						'rename-failed',
-						'Unable to rename the update to match the existing directory.'
-					);
 				}
+
+				return new WP_Error(
+					'rename-failed',
+					'Unable to rename the update to match the existing directory.'
+				);
 			}
 
 			return $source;
