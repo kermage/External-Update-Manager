@@ -240,7 +240,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		public function do_notices() {
-			if ( is_super_admin() ) {
+			if ( current_user_can( 'install_plugins' ) ) {
 				add_action( 'admin_notices', array( $this, 'show_update_message' ) );
 			}
 		}
