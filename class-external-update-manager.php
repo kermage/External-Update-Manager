@@ -251,17 +251,17 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			if ( 'update-core.php' === $pagenow ||
 				( 'theme' === $this->item_type && 'themes.php' === $pagenow ) ||
 				( 'plugin' === $this->item_type && 'plugins.php' === $pagenow ) ) {
-				return false;
+				return;
 			}
 
 			$remote_data = $this->get_remote_data();
 
 			if ( ! is_object( $remote_data ) ) {
-				return false;
+				return;
 			}
 
 			if ( version_compare( $this->item_version, $remote_data->new_version, '>=' ) ) {
-				return false;
+				return;
 			}
 
 			wp_enqueue_script( 'plugin-install' );
