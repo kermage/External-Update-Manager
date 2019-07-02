@@ -108,6 +108,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		public function set_plugin_info( $data, $action = '', $args = null ) {
+			/** @var stdClass $args */
 			if ( 'plugin_information' !== $action || $args->slug !== $this->item_slug ) {
 				return $data;
 			}
@@ -216,6 +217,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		public function fix_directory_name( $source, $remote_source, $upgrader = null, $hook_extra = null ) {
+			/** @var WP_Filesystem_Base $wp_filesystem */
 			global $wp_filesystem;
 
 			if ( ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $this->item_key ) ||
