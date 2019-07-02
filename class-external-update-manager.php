@@ -166,7 +166,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			$options  = array( 'timeout' => 10 );
 			$response = wp_remote_get( $url, $options );
 
-			if ( is_wp_error( $response ) || ! is_array( $response ) ) {
+			if ( ! is_array( $response ) || is_wp_error( $response ) ) {
 				return false;
 			}
 
@@ -210,7 +210,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		private function maybe_delete_transient() {
-			if ( 'update-core.php' === $GLOBALS['pagenow'] && isset( $_GET['force-check'] ) ) { // WPCS: CSRF ok.
+			if ( isset( $_GET['force-check'] ) && 'update-core.php' === $GLOBALS['pagenow'] ) { // WPCS: CSRF ok.
 				delete_site_transient( $this->transient );
 			}
 		}
