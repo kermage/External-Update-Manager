@@ -215,7 +215,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			}
 		}
 
-		public function fix_directory_name( $source, $remote_source, $upgrader, $hook_extra = null ) {
+		public function fix_directory_name( $source, $remote_source, $upgrader = null, $hook_extra = null ) {
 			global $wp_filesystem;
 
 			if ( ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $this->item_key ) ||
