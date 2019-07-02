@@ -174,7 +174,7 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			$body = wp_remote_retrieve_body( $response );
 
 			if ( 200 === $code ) {
-				return json_decode( $body );
+				return json_decode( $body, false );
 			}
 
 			return false;
