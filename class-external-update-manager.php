@@ -242,7 +242,9 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 		}
 
 		public function do_notices() {
-			if ( current_user_can( 'install_plugins' ) ) {
+			$updates = get_site_transient( 'update_' . $this->item_type . 's' );
+
+			if ( isset( $updates->response[ $this->item_key ] ) && current_user_can( 'install_plugins' ) ) {
 				add_action( 'admin_notices', array( $this, 'show_update_message' ) );
 			}
 		}
