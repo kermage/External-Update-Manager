@@ -19,6 +19,7 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 	 * @package External Update Manager
 	 * @since   0.1.0
 	 */
+	// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 	class EUM_Handler {
 
 		private static $versions = array();
@@ -58,6 +59,7 @@ if ( ! class_exists( 'External_Update_Manager_1_9_2' ) ) {
 	 * @package External Update Manager
 	 * @since   0.1.0
 	 */
+	// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 	class External_Update_Manager_1_9_2 {
 
 		private $update_url;
@@ -332,17 +334,20 @@ if ( ! class_exists( 'External_Update_Manager_1_9_2' ) ) {
 
 			/* phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped */
 			echo '<div class="notice notice-info is-dismissible"><p><strong>';
-			/* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number, 5: update URL, 6: additional link attributes */
-			printf( __( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="%5$s" %6$s>update now</a>.' ),
+			printf(
+				/* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number, 5: update URL, 6: additional link attributes */
+				__( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="%5$s" %6$s>update now</a>.' ),
 				$this->item_name,
 				esc_url( $details_url ),
-				sprintf( 'class="thickbox open-plugin-details-modal" aria-label="%s"',
+				sprintf(
+					'class="thickbox open-plugin-details-modal" aria-label="%s"',
 					/* translators: 1: plugin name, 2: version number */
 					esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $this->item_name, $remote_data->new_version ) )
 				),
 				$remote_data->new_version,
 				esc_url( $update_url ),
-				sprintf( 'class="update-link" aria-label="%s"',
+				sprintf(
+					'class="update-link" aria-label="%s"',
 					/* translators: %s: plugin name */
 					esc_attr( sprintf( __( 'Update %s now' ), $this->item_name ) )
 				)
