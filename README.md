@@ -10,11 +10,11 @@
 ## Installation
 1. Grab the `class-external-update-manager.php` file and place it somewhere inside the theme or plugin directory
 2. Add a `require_once` call in the theme's `functions.php` or in the plugin's `main php file` referencing the class file
-3. Instantiate the `External_Update_Manager` with the `full path` of the theme or plugin and the `update URL` to check
+3. Run the `EUM_Handler` with the `full path` of the theme or plugin and the `update URL` to check for the latest version available
 
 ```php
-require_once( 'class-external-update-manager.php' );
-new External_Update_Manager( __FILE__, '<UPDATE URL>' );
+require_once 'class-external-update-manager.php';
+EUM_Handler::run( __FILE__, '<UPDATE URL>' );
 ```
 
 ## Working Examples
