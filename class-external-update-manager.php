@@ -333,9 +333,11 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 		private static $versions = array();
 
 		public static function add_version( $number ) {
-			self::$versions[] = $number;
+			if ( ! in_array( $number, self::$versions, true ) ) {
+				self::$versions[] = $number;
 
-			usort( self::$versions, 'version_compare' );
+				usort( self::$versions, 'version_compare' );
+			}
 		}
 
 		public static function get_latest() {
