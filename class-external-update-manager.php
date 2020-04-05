@@ -13,6 +13,43 @@
  * @license GPL-3.0
  */
 
+if ( ! class_exists( 'EUM_Handler' ) ) {
+
+	/**
+	 * @package External Update Manager
+	 * @since   0.1.0
+	 */
+	class EUM_Handler {
+
+		private static $versions = array();
+
+		public static function add_version( $number ) {
+			if ( ! in_array( $number, self::$versions, true ) ) {
+				self::$versions[] = $number;
+
+				usort( self::$versions, 'version_compare' );
+			}
+		}
+
+		public static function get_latest() {
+			if ( empty( self::$versions ) ) {
+				return null;
+			}
+
+			return end( self::$versions );
+		}
+
+		public static function run( $path, $url ) {
+			$latest = str_replace( '.', '_', self::get_latest() );
+			$class  = 'External_Update_Manager_' . $latest;
+
+			return new $class( $path, $url );
+		}
+
+	}
+
+}
+
 if ( ! class_exists( 'External_Update_Manager' ) ) {
 
 	/**
@@ -316,43 +353,6 @@ if ( ! class_exists( 'External_Update_Manager' ) ) {
 			if ( ! empty( $plugin_data['upgrade_notice'] ) ) {
 				echo '<br>' . esc_html( $plugin_data['upgrade_notice'] );
 			}
-		}
-
-	}
-
-}
-
-if ( ! class_exists( 'EUM_Handler' ) ) {
-
-	/**
-	 * @package External Update Manager
-	 * @since   0.1.0
-	 */
-	class EUM_Handler {
-
-		private static $versions = array();
-
-		public static function add_version( $number ) {
-			if ( ! in_array( $number, self::$versions, true ) ) {
-				self::$versions[] = $number;
-
-				usort( self::$versions, 'version_compare' );
-			}
-		}
-
-		public static function get_latest() {
-			if ( empty( self::$versions ) ) {
-				return null;
-			}
-
-			return end( self::$versions );
-		}
-
-		public static function run( $path, $url ) {
-			$latest = str_replace( '.', '_', self::get_latest() );
-			$class  = 'External_Update_Manager_' . $latest;
-
-			return new $class( $path, $url );
 		}
 
 	}
