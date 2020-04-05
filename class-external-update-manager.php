@@ -338,8 +338,16 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 			usort( self::$versions, 'version_compare' );
 		}
 
+		public static function get_latest() {
+			if ( empty( self::$versions ) ) {
+				return null;
+			}
+
+			return end( self::$versions );
+		}
+
 		public static function run( $path, $url ) {
-			$latest = str_replace( '.', '_', end( self::$versions ) );
+			$latest = str_replace( '.', '_', self::get_latest() );
 			$class  = 'External_Update_Manager_' . $latest;
 
 			return new $class( $path, $url );
