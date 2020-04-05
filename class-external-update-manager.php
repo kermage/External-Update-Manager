@@ -50,13 +50,15 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 
 }
 
-if ( ! class_exists( 'External_Update_Manager' ) ) {
+if ( ! class_exists( 'External_Update_Manager_1_9_2' ) ) {
+
+	EUM_Handler::add_version( '1.9.2' );
 
 	/**
 	 * @package External Update Manager
 	 * @since   0.1.0
 	 */
-	class External_Update_Manager {
+	class External_Update_Manager_1_9_2 {
 
 		private $update_url;
 		private $update_data;
