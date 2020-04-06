@@ -227,18 +227,23 @@ if ( ! class_exists( 'External_Update_Manager_1_9_2' ) ) {
 			if ( 'theme' === $this->item_type ) {
 				$formatted = (array) $unformatted;
 
-				$formatted['theme'] = $this->item_slug;
+				$formatted['package'] = $unformatted->download_link;
+				$formatted['url']     = $unformatted->homepage;
 			} else {
 				$formatted = (object) $unformatted;
 
-				$formatted->name          = $this->item_name;
-				$formatted->slug          = $this->item_slug;
-				$formatted->plugin        = $this->item_key;
-				$formatted->version       = $unformatted->new_version;
-				$formatted->download_link = $unformatted->package;
-				$formatted->homepage      = $unformatted->url;
-				$formatted->author        = sprintf( '<a href="%s">%s</a>', $unformatted->author_url, $unformatted->author_name );
-				$formatted->sections      = (array) $unformatted->sections;
+				$formatted->name    = $this->item_name;
+				$formatted->slug    = $this->item_slug;
+				$formatted->version = $this->item_version;
+				$formatted->package = $formatted->download_link;
+
+				if ( ! empty( $unformatted->author_profile ) ) {
+					$formatted->author = sprintf( '<a href="%s">%s</a>', $unformatted->author_profile, $unformatted->author );
+				}
+
+				if ( ! empty( $unformatted->sections ) ) {
+					$formatted->sections = (array) $unformatted->sections;
+				}
 
 				if ( ! empty( $unformatted->banners ) ) {
 					$formatted->banners = (array) $unformatted->banners;
@@ -314,7 +319,7 @@ if ( ! class_exists( 'External_Update_Manager_1_9_2' ) ) {
 
 			if ( 'theme' === $this->item_type ) {
 				$details_args = array( 'TB_iframe' => 'true' );
-				$details_url  = $remote_data->url;
+				$details_url  = $remote_data->homepage;
 			} else {
 				$details_args = array(
 					'tab'       => 'plugin-information',
