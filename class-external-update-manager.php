@@ -234,7 +234,7 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 
 				$formatted->name    = $this->item_name;
 				$formatted->slug    = $this->item_slug;
-				$formatted->version = $this->item_version;
+				$formatted->version = $formatted->new_version;
 				$formatted->package = $formatted->download_link;
 
 				if ( ! empty( $unformatted->author_profile ) ) {
