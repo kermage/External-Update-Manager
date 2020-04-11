@@ -258,8 +258,10 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 		}
 
 		public function maybe_delete_transient( $upgrader = null, $hook_extra = null ) {
-			if ( isset( $_GET['force-check'] ) || // phpcs:ignore WordPress.Security.NonceVerification
-				( $hook_extra['type'] === $this->item_type && in_array( $this->item_key, $hook_extra[ $this->item_type . 's' ], true ) ) ) {
+			if (
+				isset( $_GET['force-check'] ) || // phpcs:ignore WordPress.Security.NonceVerification
+				( $hook_extra['type'] === $this->item_type && in_array( $this->item_key, $hook_extra[ $this->item_type . 's' ], true ) )
+			) {
 				delete_site_transient( $this->transient );
 			}
 		}
@@ -268,8 +270,10 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 			/** @var WP_Filesystem_Base $wp_filesystem */
 			global $wp_filesystem;
 
-			if ( ( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $this->item_key ) ||
-				( isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] === $this->item_key ) ) {
+			if (
+				( isset( $hook_extra['theme'] ) && $hook_extra['theme'] === $this->item_key ) ||
+				( isset( $hook_extra['plugin'] ) && $hook_extra['plugin'] === $this->item_key )
+			) {
 				$corrected_source = trailingslashit( $remote_source ) . $this->item_slug . '/';
 
 				if ( $source === $corrected_source ) {
@@ -300,9 +304,11 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 		public function show_update_message() {
 			global $pagenow;
 
-			if ( 'update-core.php' === $pagenow ||
+			if (
+				'update-core.php' === $pagenow ||
 				( 'theme' === $this->item_type && 'themes.php' === $pagenow ) ||
-				( 'plugin' === $this->item_type && 'plugins.php' === $pagenow ) ) {
+				( 'plugin' === $this->item_type && 'plugins.php' === $pagenow )
+			) {
 				return;
 			}
 
