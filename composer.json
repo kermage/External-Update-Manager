@@ -16,6 +16,11 @@
 	"require": {
 		"php": ">=5.6.0"
 	},
+	"autoload": {
+		"files": [
+			"class-external-update-manager.php"
+		]
+	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
 		"wp-coding-standards/wpcs": "^2.2",
