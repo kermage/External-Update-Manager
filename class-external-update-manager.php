@@ -90,8 +90,7 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 
 			add_filter( 'upgrader_source_selection', array( $this, 'fix_directory_name' ), 10, 4 );
 			add_action( 'admin_init', array( $this, 'do_notices' ) );
-
-			$this->maybe_delete_transient();
+			add_action( 'load-update-core.php', array( $this, 'maybe_delete_transient' ) );
 		}
 
 		private function get_file_details( $path ) {
@@ -257,8 +256,8 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 			return $formatted;
 		}
 
-		private function maybe_delete_transient() {
-			if ( isset( $_GET['force-check'] ) && 'update-core.php' === $GLOBALS['pagenow'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+		public function maybe_delete_transient() {
+			if ( isset( $_GET['force-check'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 				delete_site_transient( $this->transient );
 			}
 		}
