@@ -91,6 +91,7 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 			add_filter( 'upgrader_source_selection', array( $this, 'fix_directory_name' ), 10, 4 );
 			add_action( 'admin_init', array( $this, 'do_notices' ) );
 			add_action( 'load-update-core.php', array( $this, 'maybe_delete_transient' ) );
+			add_action( 'upgrader_process_complete', array( $this, 'maybe_delete_transient' ), 10, 2 );
 		}
 
 		private function get_file_details( $path ) {
@@ -256,8 +257,9 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 			return $formatted;
 		}
 
-		public function maybe_delete_transient() {
-			if ( isset( $_GET['force-check'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		public function maybe_delete_transient( $upgrader = null, $hook_extra = null ) {
+			if ( isset( $_GET['force-check'] ) || // phpcs:ignore WordPress.Security.NonceVerification
+				( $hook_extra['type'] === $this->item_type && in_array( $this->item_key, $hook_extra[ $this->item_type . 's' ], true ) ) ) {
 				delete_site_transient( $this->transient );
 			}
 		}
