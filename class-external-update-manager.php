@@ -69,15 +69,17 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 		private $item_slug;
 		private $item_key;
 		private $item_name;
+		private $transient;
 		private $item_version = '';
-		private $transient    = 'eum_';
 		private $has_update   = false;
 
 		public function __construct( $full_path, $update_url, $custom_arg ) {
 			$this->update_url = $update_url;
 			$this->custom_arg = $custom_arg;
+
 			$this->get_file_details( $full_path );
-			$this->transient .= $this->item_type . '_' . $this->item_slug;
+
+			$this->transient = 'eum_' . $this->item_type . '_' . $this->item_slug;
 
 			add_filter( 'site_transient_update_' . $this->item_type . 's', array( $this, 'set_available_update' ) );
 			add_filter( 'delete_site_transient_update_' . $this->item_type . 's', array( $this, 'reset_cached_data' ) );
