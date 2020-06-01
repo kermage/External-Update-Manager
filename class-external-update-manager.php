@@ -123,6 +123,10 @@ if ( ! class_exists( 'External_Update_Manager_2_0_0' ) ) {
 				$this->item_name    = $data['Name'];
 				$this->item_version = $data['Version'];
 			}
+
+			if ( is_array( $this->item_version ) ) {
+				$this->item_version = '';
+			}
 		}
 
 		public function set_available_update( $transient ) {
