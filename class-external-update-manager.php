@@ -132,7 +132,7 @@ if ( ! class_exists( 'External_Update_Manager_2_1_0' ) ) {
 		public function set_available_update( $transient ) {
 			$remote_data = $this->get_remote_data();
 
-			if ( ! is_object( $remote_data ) ) {
+			if ( empty( $transient ) || ! is_object( $remote_data ) ) {
 				return $transient;
 			}
 
