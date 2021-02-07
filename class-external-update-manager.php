@@ -266,7 +266,10 @@ if ( ! class_exists( 'External_Update_Manager_2_1_0' ) ) {
 		public function maybe_delete_transient( $upgrader = null, $hook_extra = null ) {
 			if (
 				isset( $_GET['force-check'] ) || // phpcs:ignore WordPress.Security.NonceVerification
-				( $hook_extra['type'] === $this->item_type && in_array( $this->item_key, $hook_extra[ $this->item_type . 's' ], true ) )
+				(
+					! empty( $hook_extra['type'] ) && ! empty( $hook_extra[ $this->item_type . 's' ] ) &&
+					$hook_extra['type'] === $this->item_type && in_array( $this->item_key, $hook_extra[ $this->item_type . 's' ], true )
+				)
 			) {
 				delete_site_transient( $this->transient );
 			}
