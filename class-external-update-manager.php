@@ -201,7 +201,10 @@ if ( ! class_exists( 'External_Update_Manager_2_2_0' ) ) {
 
 			if ( ! is_object( $data ) ) {
 				$data = $this->call_remote_api();
-				set_site_transient( $this->transient, $data, HOUR_IN_SECONDS );
+
+				$expiration = $this->filter( 'remote_data_expiration', HOUR_IN_SECONDS );
+
+				set_site_transient( $this->transient, $data, $expiration );
 			}
 
 			$this->update_data = $data;
@@ -215,7 +218,7 @@ if ( ! class_exists( 'External_Update_Manager_2_2_0' ) ) {
 				'timeout' => 10,
 			);
 			$options  = array_merge( $defaults, $this->custom_arg );
-			$response = wp_remote_request( $this->update_url, $options );
+			$response = wp_remote_request( $this->update_url, $this->filter( 'api_request_options', $options ) );
 
 			if ( ! is_array( $response ) || is_wp_error( $response ) ) {
 				return false;
@@ -419,12 +422,17 @@ if ( ! class_exists( 'External_Update_Manager_2_2_0' ) ) {
 
 		public function dismiss_notice_action() {
 			$name   = sanitize_text_field( $_POST['name'] );
-			$expire = time() + HOUR_IN_SECONDS;
+			$expire = time() + $this->filter( 'dismiss_notice_expiration', HOUR_IN_SECONDS );
 			$secure = is_ssl();
 
 			setcookie( $name, true, $expire, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
 
 			wp_die();
+		}
+
+
+		private function filter( $hook_name, $args ) {
+			return apply_filters( $this->transient . '_' . $hook_name, $args );
 		}
 
 	}
