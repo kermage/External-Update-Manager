@@ -246,7 +246,10 @@ if ( ! class_exists( 'External_Update_Manager_2_2_0' ) ) {
 				$formatted->name    = $this->item_name;
 				$formatted->slug    = $this->item_slug;
 				$formatted->version = $formatted->new_version;
-				$formatted->package = $formatted->download_link;
+
+				if ( ! empty( $unformatted->download_link ) ) {
+					$formatted->package = $formatted->download_link;
+				}
 
 				if ( ! empty( $unformatted->author_profile ) ) {
 					$formatted->author = sprintf( '<a href="%s">%s</a>', $unformatted->author_profile, $unformatted->author );
@@ -254,14 +257,20 @@ if ( ! class_exists( 'External_Update_Manager_2_2_0' ) ) {
 
 				if ( ! empty( $unformatted->sections ) ) {
 					$formatted->sections = (array) $unformatted->sections;
+				} else {
+					$formatted->sections = array();
 				}
 
 				if ( ! empty( $unformatted->banners ) ) {
 					$formatted->banners = (array) $unformatted->banners;
+				} else {
+					$formatted->banners = array();
 				}
 
 				if ( ! empty( $unformatted->icons ) ) {
 					$formatted->icons = (array) $unformatted->icons;
+				} else {
+					$formatted->icons = array();
 				}
 			}
 
