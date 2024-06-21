@@ -9,7 +9,7 @@
  * @package External Update Manager
  * @link    https://github.com/kermage/External-Update-Manager
  * @author  Gene Alyson Fortunado Torcende
- * @version 2.2.0
+ * @version 2.3.0
  * @license GPL-3.0
  */
 
@@ -46,7 +46,6 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 
 			return new $class( $path, $url, $args );
 		}
-
 	}
 
 }
@@ -441,7 +440,6 @@ if ( ! class_exists( 'External_Update_Manager_2_2_0' ) ) {
 		private function filter( $hook_name, $args ) {
 			return apply_filters( $this->transient . '_' . $hook_name, $args );
 		}
-
 	}
 
 }
