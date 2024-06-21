@@ -82,7 +82,7 @@ if ( ! class_exists( 'External_Update_Manager_2_2_0' ) ) {
 			$this->transient = 'eum_' . $this->item_type . '_' . $this->item_slug;
 
 			add_filter( 'site_transient_update_' . $this->item_type . 's', array( $this, 'set_available_update' ) );
-			add_filter( 'delete_site_transient_update_' . $this->item_type . 's', array( $this, 'reset_cached_data' ) );
+			add_action( 'delete_site_transient_update_' . $this->item_type . 's', array( $this, 'reset_cached_data' ) );
 
 			if ( 'plugin' === $this->item_type ) {
 				add_filter( 'plugins_api', array( $this, 'set_plugin_info' ), 10, 3 );
@@ -151,11 +151,9 @@ if ( ! class_exists( 'External_Update_Manager_2_2_0' ) ) {
 			return $transient;
 		}
 
-		public function reset_cached_data( $transient ) {
+		public function reset_cached_data() {
 			$this->update_data = null;
 			delete_site_transient( $this->transient );
-
-			return $transient;
 		}
 
 		public function set_plugin_info( $data, $action = '', $args = null ) {
