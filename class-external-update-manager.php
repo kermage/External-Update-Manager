@@ -218,7 +218,7 @@ if ( ! class_exists( 'External_Update_Manager_2_3_0' ) ) {
 			$options  = array_merge( $defaults, $this->custom_arg );
 			$response = wp_remote_request( $this->update_url, $this->filter( 'api_request_options', $options ) );
 
-			if ( ! is_array( $response ) || is_wp_error( $response ) ) {
+			if ( is_wp_error( $response ) ) {
 				return false;
 			}
 
