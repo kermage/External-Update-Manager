@@ -198,7 +198,7 @@ if ( ! class_exists( 'External_Update_Manager_2_3_0' ) ) {
 			$data = get_site_transient( $this->transient );
 
 			if ( ! is_object( $data ) ) {
-				$data = $this->call_remote_api();
+				$data = $this->filter( 'remote_update_data', $this->call_remote_api() );
 
 				$expiration = $this->filter( 'remote_data_expiration', HOUR_IN_SECONDS );
 
@@ -216,7 +216,7 @@ if ( ! class_exists( 'External_Update_Manager_2_3_0' ) ) {
 				'timeout' => 10,
 			);
 			$options  = array_merge( $defaults, $this->custom_arg );
-			$response = wp_remote_request( $this->update_url, $this->filter( 'api_request_options', $options ) );
+			$response = wp_remote_request( $this->filter( 'api_update_url', $this->update_url ), $this->filter( 'api_request_options', $options ) );
 
 			if ( is_wp_error( $response ) ) {
 				return false;
@@ -272,7 +272,7 @@ if ( ! class_exists( 'External_Update_Manager_2_3_0' ) ) {
 				}
 			}
 
-			return $formatted;
+			return $this->filter( 'formatted_response', $formatted );
 		}
 
 		public function maybe_delete_transient( $upgrader = null, $hook_extra = null ) {
