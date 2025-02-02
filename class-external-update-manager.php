@@ -198,7 +198,7 @@ if ( ! class_exists( 'External_Update_Manager_2_3_0' ) ) {
 			$data = get_site_transient( $this->transient );
 
 			if ( ! is_object( $data ) ) {
-				$data = $this->filter( 'remote_update_data', $this->call_remote_api() );
+				$data = (object) $this->filter( 'remote_update_data', $this->call_remote_api() );
 
 				$expiration = $this->filter( 'remote_data_expiration', HOUR_IN_SECONDS );
 
@@ -226,7 +226,7 @@ if ( ! class_exists( 'External_Update_Manager_2_3_0' ) ) {
 			$body = wp_remote_retrieve_body( $response );
 
 			if ( 200 === $code ) {
-				return json_decode( $body, false );
+				return json_decode( $body, true );
 			}
 
 			return false;
@@ -254,19 +254,19 @@ if ( ! class_exists( 'External_Update_Manager_2_3_0' ) ) {
 				}
 
 				if ( ! empty( $unformatted->sections ) ) {
-					$formatted->sections = (array) $unformatted->sections;
+					$formatted->sections = maybe_unserialize( $unformatted->sections );
 				} else {
 					$formatted->sections = array();
 				}
 
 				if ( ! empty( $unformatted->banners ) ) {
-					$formatted->banners = (array) $unformatted->banners;
+					$formatted->banners = maybe_unserialize( $unformatted->banners );
 				} else {
 					$formatted->banners = array();
 				}
 
 				if ( ! empty( $unformatted->icons ) ) {
-					$formatted->icons = (array) $unformatted->icons;
+					$formatted->icons = maybe_unserialize( $unformatted->icons );
 				} else {
 					$formatted->icons = array();
 				}
