@@ -374,10 +374,19 @@ if ( ! class_exists( 'External_Update_Manager_2_4_0' ) ) {
 			/* phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped */
 			echo '<div class="notice notice-info is-dismissible eum-notice" data-eum="' . esc_attr( $this->transient ) . '"><p><strong>';
 			printf(
-				/* translators: 1: plugin name, 2: action links */
+				/* translators: 1: plugin name, 2: action link/s */
 				__( 'There is a new version of %1$s available. %2$s.' ),
 				$this->item_name,
-				sprintf(
+				empty( $remote_data->package )
+				? sprintf(
+					'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
+					esc_url( $details_url ),
+					/* translators: 1: plugin name, 2: version number */
+					sprintf( __( 'View %1$s version %2$s details' ), $this->item_name, $remote_data->new_version ),
+					/* translators: %s: plugin name */
+					sprintf( __( 'View version %s details' ), $remote_data->new_version )
+				)
+				: sprintf(
 					/* translators: 1: view details, 2: update now */
 					__( '%1$s or %2$s' ),
 					sprintf(
