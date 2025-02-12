@@ -405,6 +405,8 @@ if ( ! class_exists( 'External_Update_Manager_2_4_0' ) ) {
 				return;
 			}
 
+			$nonce = wp_create_nonce( 'eum_dismiss_notice' );
+
 			ob_start();
 			?>
 
@@ -416,18 +418,21 @@ if ( ! class_exists( 'External_Update_Manager_2_4_0' ) ) {
 						data : {
 							action: 'eum_dismiss_notice',
 							name: jQuery( this ).parent().data( 'eum' ),
+							_wpnonce: <?php echo esc_js( $nonce ); ?>,
 						},
 					});
 				});
 			</script>
 
 			<?php
-			echo ob_get_clean();
+			echo wp_kses( ob_get_clean(), array( 'script' => array() ) );
 
 			wp_cache_set( 'eum_dismiss_notice', true );
 		}
 
 		public function dismiss_notice_action() {
+			check_admin_referer( 'eum_dismiss_notice' );
+
 			$name   = sanitize_text_field( $_POST['name'] );
 			$expire = time() + $this->filter( 'dismiss_notice_expiration', HOUR_IN_SECONDS );
 			$secure = is_ssl();
