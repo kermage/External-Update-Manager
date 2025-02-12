@@ -363,43 +363,58 @@ if ( ! class_exists( 'External_Update_Manager_2_4_0' ) ) {
 				$details_url  = self_admin_url( 'plugin-install.php' );
 			}
 
-			$details_url = add_query_arg( $details_args, $details_url );
+			$details_url = $this->filter(
+				'notice_details_url',
+				add_query_arg( $details_args, $details_url )
+			);
 			$update_args = array(
 				'action'         => 'upgrade-' . $this->item_type,
 				$this->item_type => rawurlencode( $this->item_key ),
 				'_wpnonce'       => wp_create_nonce( 'upgrade-' . $this->item_type . '_' . $this->item_key ),
 			);
-			$update_url  = add_query_arg( $update_args, self_admin_url( 'update.php' ) );
-
-			$details_link = sprintf(
-				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
-				esc_url( $details_url ),
-				/* translators: 1: plugin name, 2: version number */
-				sprintf( __( 'View %1$s version %2$s details' ), $this->item_name, $remote_data->new_version ),
-				/* translators: %s: plugin name */
-				sprintf( __( 'View version %s details' ), $remote_data->new_version )
+			$update_url  = $this->filter(
+				'notice_update_url',
+				add_query_arg( $update_args, self_admin_url( 'update.php' ) )
 			);
 
-			$update_link = sprintf(
-				'<a href="%s" class="update-link" aria-label="%s">%s</a>',
-				esc_url( $update_url ),
-				/* translators: 1: plugin name, 2: version number */
-				sprintf( __( 'Update %1$s to version %2$s' ), $this->item_name, $remote_data->new_version ),
-				__( 'update now' )
+			$details_link = $this->filter(
+				'notice_details_link',
+				sprintf(
+					'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
+					esc_url( $details_url ),
+					/* translators: 1: plugin name, 2: version number */
+					sprintf( __( 'View %1$s version %2$s details' ), $this->item_name, $remote_data->new_version ),
+					/* translators: %s: plugin name */
+					sprintf( __( 'View version %s details' ), $remote_data->new_version )
+				)
 			);
 
-			$message = sprintf(
-				/* translators: 1: plugin name, 2: action link/s */
-				__( 'There is a new version of %1$s available. %2$s.' ),
-				$this->item_name,
-				empty( $remote_data->package )
-					? $details_link
-					: sprintf(
-						/* translators: 1: view details, 2: update now */
-						__( '%1$s or %2$s' ),
-						$details_link,
-						$update_link
-					)
+			$update_link = $this->filter(
+				'notice_update_link',
+				sprintf(
+					'<a href="%s" class="update-link" aria-label="%s">%s</a>',
+					esc_url( $update_url ),
+					/* translators: 1: plugin name, 2: version number */
+					sprintf( __( 'Update %1$s to version %2$s' ), $this->item_name, $remote_data->new_version ),
+					__( 'update now' )
+				)
+			);
+
+			$message = $this->filter(
+				'notice_message',
+				sprintf(
+					/* translators: 1: plugin name, 2: action link/s */
+					__( 'There is a new version of %1$s available. %2$s.' ),
+					$this->item_name,
+					empty( $remote_data->package )
+						? $details_link
+						: sprintf(
+							/* translators: 1: view details, 2: update now */
+							__( '%1$s or %2$s' ),
+							$details_link,
+							$update_link
+						)
+				)
 			);
 
 			echo '<div class="notice notice-info is-dismissible eum-notice" data-eum="' . esc_attr( $this->transient ) . '"><p><strong>' . wp_kses_post( $message ) . '</strong></p></div>';
