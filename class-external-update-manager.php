@@ -178,11 +178,12 @@ if ( ! class_exists( 'External_Update_Manager_2_4_0' ) ) {
 
 			$url  = 'plugin-install.php?tab=plugin-information&plugin=' . rawurlencode( $this->item_slug ) . '&TB_iframe=true';
 			$link = sprintf(
-				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">View details</a>',
+				'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
 				esc_url( network_admin_url( $url ) ),
 				/* translators: %s: plugin name */
 				esc_attr( sprintf( __( 'More information about %s' ), $this->item_name ) ),
-				esc_attr( $this->item_name )
+				esc_attr( $this->item_name ),
+				__( 'View details' )
 			);
 
 			$meta[] = $link;
@@ -373,21 +374,27 @@ if ( ! class_exists( 'External_Update_Manager_2_4_0' ) ) {
 			/* phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped */
 			echo '<div class="notice notice-info is-dismissible eum-notice" data-eum="' . esc_attr( $this->transient ) . '"><p><strong>';
 			printf(
-				/* translators: 1: plugin name, 2: details URL, 3: additional link attributes, 4: version number, 5: update URL, 6: additional link attributes */
-				__( 'There is a new version of %1$s available. <a href="%2$s" %3$s>View version %4$s details</a> or <a href="%5$s" %6$s>update now</a>.' ),
+				/* translators: 1: plugin name, 2: action links */
+				__( 'There is a new version of %1$s available. %2$s.' ),
 				$this->item_name,
-				esc_url( $details_url ),
 				sprintf(
-					'class="thickbox open-plugin-details-modal" aria-label="%s"',
-					/* translators: 1: plugin name, 2: version number */
-					esc_attr( sprintf( __( 'View %1$s version %2$s details' ), $this->item_name, $remote_data->new_version ) )
-				),
-				$remote_data->new_version,
-				esc_url( $update_url ),
-				sprintf(
-					'class="update-link" aria-label="%s"',
-					/* translators: %s: plugin name */
-					esc_attr( sprintf( __( 'Update %s now' ), $this->item_name ) )
+					/* translators: 1: view details, 2: update now */
+					__( '%1$s or %2$s' ),
+					sprintf(
+						'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
+						esc_url( $details_url ),
+						/* translators: 1: plugin name, 2: version number */
+						sprintf( __( 'View %1$s version %2$s details' ), $this->item_name, $remote_data->new_version ),
+						/* translators: %s: plugin name */
+						sprintf( __( 'View version %s details' ), $remote_data->new_version )
+					),
+					sprintf(
+						'<a href="%s" class="update-link" aria-label="%s">%s</a>',
+						esc_url( $update_url ),
+						/* translators: 1: plugin name, 2: version number */
+						sprintf( __( 'Update %1$s to version %2$s' ), $this->item_name, $remote_data->new_version ),
+						__( 'update now' )
+					)
 				)
 			);
 			echo '</strong></p></div>';
