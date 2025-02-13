@@ -444,7 +444,7 @@ if ( ! class_exists( 'External_Update_Manager_2_4_0' ) ) {
 						data : {
 							action: 'eum_dismiss_notice',
 							name: jQuery( this ).parent().data( 'eum' ),
-							_wpnonce: <?php echo esc_js( $nonce ); ?>,
+							_wpnonce: '<?php echo esc_js( $nonce ); ?>',
 						},
 					});
 				});
