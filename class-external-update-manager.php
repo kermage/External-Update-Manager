@@ -34,15 +34,25 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 
 		public static function get_latest() {
 			if ( empty( self::$versions ) ) {
-				return null;
+				return false;
 			}
 
 			return end( self::$versions );
 		}
 
 		public static function run( $path, $url, $args = array() ) {
-			$latest = str_replace( '.', '_', self::get_latest() );
+			$latest = self::get_latest();
+
+			if ( false === $latest ) {
+				return null;
+			}
+
+			$latest = str_replace( '.', '_', $latest );
 			$class  = 'External_Update_Manager_' . $latest;
+
+			if ( ! class_exists( $class ) ) {
+				return null;
+			}
 
 			return new $class( $path, $url, $args );
 		}
