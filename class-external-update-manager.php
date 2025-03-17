@@ -174,6 +174,10 @@ if ( ! class_exists( 'External_Update_Manager_2_5_0' ) ) {
 
 			$remote_data = $this->get_remote_data();
 
+			if ( ! is_object( $remote_data ) ) {
+				return $data;
+			}
+
 			return $this->format_response( $remote_data );
 		}
 
@@ -209,7 +213,13 @@ if ( ! class_exists( 'External_Update_Manager_2_5_0' ) ) {
 			$data = get_site_transient( $this->transient );
 
 			if ( ! is_object( $data ) ) {
-				$data = (object) $this->filter( 'remote_update_data', $this->call_remote_api() );
+				$data = $this->filter( 'remote_update_data', $this->call_remote_api() );
+
+				if ( empty( $data ) ) {
+					return false;
+				}
+
+				$data = (object) $data;
 
 				$expiration = $this->filter( 'remote_data_expiration', HOUR_IN_SECONDS );
 
