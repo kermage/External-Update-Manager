@@ -81,7 +81,6 @@ if ( ! class_exists( 'External_Update_Manager_2_5_0' ) ) {
 		private $item_name;
 		private $transient;
 		private $item_version = '';
-		private $has_update   = false;
 
 		public function __construct( $full_path, $update_url, $custom_arg ) {
 			$this->update_url = $update_url;
@@ -154,8 +153,6 @@ if ( ! class_exists( 'External_Update_Manager_2_5_0' ) ) {
 
 			if ( version_compare( $this->item_version, $remote_data->new_version, '<' ) ) {
 				$transient->response[ $this->item_key ] = $this->format_response( $remote_data );
-
-				$this->has_update = true;
 			}
 
 			return $transient;
@@ -186,7 +183,7 @@ if ( ! class_exists( 'External_Update_Manager_2_5_0' ) ) {
 				return $meta;
 			}
 
-			if ( $this->has_update ) {
+			if ( $this->update_data ) {
 				return $meta;
 			}
 
