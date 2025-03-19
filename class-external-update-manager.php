@@ -153,6 +153,10 @@ if ( ! class_exists( 'External_Update_Manager_2_5_0' ) ) {
 
 			if ( version_compare( $this->item_version, $remote_data->new_version, '<' ) ) {
 				$transient->response[ $this->item_key ] = $this->format_response( $remote_data );
+
+				$transient->checked[ $this->item_key ] = $remote_data->new_version;
+			} else {
+				$transient->no_update[ $this->item_key ] = $this->format_response( $remote_data );
 			}
 
 			return $transient;
