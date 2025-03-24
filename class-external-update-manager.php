@@ -271,7 +271,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_0' ) ) {
 					$formatted->package = $formatted->download_link;
 				}
 
-				if ( ! empty( $unformatted->author_profile ) ) {
+				if ( ! empty( $unformatted->author ) && ! empty( $unformatted->author_profile ) ) {
 					$formatted->author = sprintf( '<a href="%s">%s</a>', $unformatted->author_profile, $unformatted->author );
 				}
 
