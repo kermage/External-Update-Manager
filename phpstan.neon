@@ -1,0 +1,14 @@
+parameters:
+  level: 5
+  excludePaths:
+    - vendor
+  scanFiles:
+    - class-external-update-manager.php
+  scanDirectories:
+    - %currentWorkingDirectory%/.cache/wordpress
+    - %currentWorkingDirectory%/.cache/wordpress-tests-lib
+  dynamicConstantNames:
+    - ADMIN_COOKIE_PATH
+    - COOKIE_DOMAIN
+  ignoreErrors:
+    - '#Constant [a-zA-Z0-9\\_]*COOKIE_[a-zA-Z0-9\\_]+ not found#'

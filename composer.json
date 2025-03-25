@@ -32,6 +32,7 @@
 		"themeplate/tester": "^2.2"
 	},
 	"scripts": {
+		"analyse": "phpstan analyse -v",
 		"lint": "phpcs --colors -p -s -v",
 		"fix": "phpcbf -p -v"
 	}
