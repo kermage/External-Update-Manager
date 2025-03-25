@@ -4,7 +4,7 @@
 *self-hosted...can't be submitted to official WordPress repository...non-GPL licensed...custom-made...commercial...etc.*
 
 ## Requirements
-* PHP 5.2.4+
+* PHP 7.4+
 * WordPress 4.4.0+
 
 ## Installation
