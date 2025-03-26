@@ -316,23 +316,9 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 					$formatted->author = sprintf( '<a href="%s">%s</a>', $unformatted->author_profile, $unformatted->author );
 				}
 
-				if ( ! empty( $unformatted->sections ) ) {
-					$formatted->sections = maybe_unserialize( $unformatted->sections );
-				} else {
-					$formatted->sections = array();
-				}
-
-				if ( ! empty( $unformatted->banners ) ) {
-					$formatted->banners = maybe_unserialize( $unformatted->banners );
-				} else {
-					$formatted->banners = array();
-				}
-
-				if ( ! empty( $unformatted->icons ) ) {
-					$formatted->icons = maybe_unserialize( $unformatted->icons );
-				} else {
-					$formatted->icons = array();
-				}
+				$formatted->sections = empty( $unformatted->sections ) ? array() : maybe_unserialize( $unformatted->sections );
+				$formatted->banners  = empty( $unformatted->banners ) ? array() : maybe_unserialize( $unformatted->banners );
+				$formatted->icons    = empty( $unformatted->icons ) ? array() : maybe_unserialize( $unformatted->icons );
 			}
 
 			return $this->filter( 'formatted_response', $formatted );
