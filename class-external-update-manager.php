@@ -34,7 +34,7 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 		}
 
 		public static function get_latest(): string {
-			if ( empty( self::$versions ) ) {
+			if ( array() === self::$versions ) {
 				return '';
 			}
 
@@ -221,7 +221,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 				return $meta;
 			}
 
-			if ( $this->update_data ) {
+			if ( null !== $this->update_data ) {
 				return $meta;
 			}
 
@@ -242,7 +242,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 
 		/** @return null|RemoteData */
 		private function get_remote_data(): ?object {
-			if ( $this->update_data ) {
+			if ( null !== $this->update_data ) {
 				return $this->update_data;
 			}
 
