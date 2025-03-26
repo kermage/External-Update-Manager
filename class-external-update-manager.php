@@ -22,6 +22,7 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 	// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 	class EUM_Handler {
 
+		/** @var array<int, string> */
 		private static array $versions = array();
 
 		public static function add_version( string $number ): void {
@@ -40,6 +41,7 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 			return end( self::$versions );
 		}
 
+		/** @param array<string, string> $args */
 		public static function run( string $path, string $url, array $args = array() ): ?object {
 			$latest = self::get_latest();
 
@@ -68,11 +70,33 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 	/**
 	 * @package External Update Manager
 	 * @since   0.1.0
+	 *
+	 * @phpstan-type Transient object{
+	 *     response: array<string, string>,
+	 *     checked: array<string, string>,
+	 *     no_update: array<string, string>,
+	 * }&\stdClass
+	 *
+	 * @phpstan-type RemoteData object{
+	 *     new_version: string,
+	 *     package: string,
+	 *     name: string,
+	 *     slug: string,
+	 *     version: string,
+	 *     homepage: string,
+	 *     download_link: string,
+	 *     author: string,
+	 *     author_profile: string,
+	 *     sections: string,
+	 *     banners: string,
+	 *     icons: string,
+	 * }&\stdClass
 	 */
 	// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 	class External_Update_Manager_2_6_1 {
 
 		private string $update_url;
+		/** @var array<string, string> */
 		private array $custom_arg;
 		private string $item_type;
 		private string $item_slug;
@@ -80,8 +104,10 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 		private string $item_name;
 		private string $transient;
 		private string $item_version = '';
+		/** @var RemoteData|null */
 		private ?object $update_data = null;
 
+		/** @param array<string, string> $custom_arg */
 		public function __construct( string $full_path, string $update_url, array $custom_arg ) {
 			$this->update_url = $update_url;
 			$this->custom_arg = $custom_arg;
@@ -136,6 +162,10 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			}
 		}
 
+		/**
+		 * @param Transient|false $transient
+		 * @return object|false
+		 */
 		public function set_available_update( $transient ) {
 			$remote_data = $this->get_remote_data();
 
@@ -163,8 +193,13 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			delete_site_transient( $this->transient );
 		}
 
+		/**
+		 * @param false|object|array<string, string> $data
+		 * @param object{slug: string}|null $args
+		 * @return false|object|array<string, string>
+		 * */
 		public function set_plugin_info( $data, string $action = '', ?object $args = null ) {
-			if ( 'plugin_information' !== $action || $args->slug !== $this->item_slug ) {
+			if ( 'plugin_information' !== $action || empty( $args ) || $args->slug !== $this->item_slug ) {
 				return $data;
 			}
 
@@ -177,6 +212,10 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			return $this->format_response( $remote_data );
 		}
 
+		/**
+		 * @param array<int, string> $meta
+		 * @return array<int, string>
+		 * */
 		public function add_view_details( array $meta, string $file ): array {
 			if ( $file !== $this->item_key ) {
 				return $meta;
@@ -201,6 +240,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			return $meta;
 		}
 
+		/** @return null|RemoteData */
 		private function get_remote_data(): ?object {
 			if ( $this->update_data ) {
 				return $this->update_data;
@@ -217,23 +257,25 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 
 				$data = (object) $data;
 
-				$expiration = $this->filter( 'remote_data_expiration', HOUR_IN_SECONDS );
+				$expiration = (int) $this->filter( 'remote_data_expiration', HOUR_IN_SECONDS );
 
 				set_site_transient( $this->transient, $data, $expiration );
 			}
 
+			/** @var RemoteData $data */
 			$this->update_data = $data;
 
 			return $data;
 		}
 
+		/** @return null|array<string, string> */
 		private function call_remote_api(): ?array {
 			$defaults = array(
 				'method'  => 'GET',
 				'timeout' => 10,
 			);
 			$options  = array_merge( $defaults, $this->custom_arg );
-			$response = wp_remote_request( $this->filter( 'api_update_url', $this->update_url ), $this->filter( 'api_request_options', $options ) );
+			$response = wp_remote_request( (string) $this->filter( 'api_update_url', $this->update_url ), (array) $this->filter( 'api_request_options', $options ) );
 
 			if ( is_wp_error( $response ) ) {
 				return null;
@@ -243,12 +285,16 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			$body = wp_remote_retrieve_body( $response );
 
 			if ( 200 === $code ) {
-				return json_decode( $body, true );
+				return (array) json_decode( $body, true );
 			}
 
 			return null;
 		}
 
+		/**
+		 * @param RemoteData $unformatted
+		 * @return object|array<string, string>
+		 * */
 		private function format_response( object $unformatted ) {
 			if ( 'theme' === $this->item_type ) {
 				$formatted = (array) $unformatted;
@@ -292,18 +338,27 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			return $this->filter( 'formatted_response', $formatted );
 		}
 
+		/**
+		 * @param string|WP_Upgrader $upgrader
+		 * @param array<string, string> $hook_extra
+		 * */
 		public function maybe_delete_transient( $upgrader, ?array $hook_extra = null ): void {
 			if (
 				isset( $_GET['force-check'] ) || // phpcs:ignore WordPress.Security.NonceVerification
 				(
 					! empty( $hook_extra['type'] ) && ! empty( $hook_extra[ $this->item_type . 's' ] ) &&
-					$hook_extra['type'] === $this->item_type && in_array( $this->item_key, $hook_extra[ $this->item_type . 's' ], true )
+					$hook_extra['type'] === $this->item_type && in_array( $this->item_key, (array) $hook_extra[ $this->item_type . 's' ], true )
 				)
 			) {
 				delete_site_transient( $this->transient );
 			}
 		}
 
+
+		/**
+		 * @param array<string, string> $hook_extra
+		 * @return string|WP_Error
+		 * */
 		public function fix_directory_name( string $source, string $remote_source, WP_Upgrader $upgrader, array $hook_extra ) {
 			/** @var WP_Filesystem_Base $wp_filesystem */
 			global $wp_filesystem;
@@ -336,6 +391,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 				return;
 			}
 
+			/** @var Transient $updates */
 			$updates = get_site_transient( 'update_' . $this->item_type . 's' );
 
 			if ( isset( $updates->response[ $this->item_key ] ) && current_user_can( 'install_plugins' ) ) {
@@ -379,7 +435,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 				$details_url  = self_admin_url( 'plugin-install.php' );
 			}
 
-			$details_url = $this->filter(
+			$details_url = (string) $this->filter(
 				'notice_details_url',
 				add_query_arg( $details_args, $details_url )
 			);
@@ -388,12 +444,12 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 				$this->item_type => rawurlencode( $this->item_key ),
 				'_wpnonce'       => wp_create_nonce( 'upgrade-' . $this->item_type . '_' . $this->item_key ),
 			);
-			$update_url  = $this->filter(
+			$update_url  = (string) $this->filter(
 				'notice_update_url',
 				add_query_arg( $update_args, self_admin_url( 'update.php' ) )
 			);
 
-			$details_link = $this->filter(
+			$details_link = (string) $this->filter(
 				'notice_details_link',
 				sprintf(
 					'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
@@ -405,7 +461,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 				)
 			);
 
-			$update_link = $this->filter(
+			$update_link = (string) $this->filter(
 				'notice_update_link',
 				sprintf(
 					'<a href="%s" class="update-link" aria-label="%s">%s</a>',
@@ -416,7 +472,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 				)
 			);
 
-			$message = $this->filter(
+			$message = (string) $this->filter(
 				'notice_message',
 				sprintf(
 					/* translators: 1: plugin name, 2: action link/s */
@@ -436,6 +492,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			echo '<div class="notice notice-info is-dismissible eum-notice" data-eum="' . esc_attr( $this->transient ) . '"><p><strong>' . wp_kses_post( $message ) . '</strong></p></div>';
 		}
 
+		/** @param array<string, string> $plugin_data */
 		public function plugin_update_message( array $plugin_data ): void {
 			if ( ! empty( $plugin_data['upgrade_notice'] ) ) {
 				echo '<br>' . esc_html( $plugin_data['upgrade_notice'] );
@@ -467,7 +524,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			</script>
 
 			<?php
-			echo wp_kses( ob_get_clean(), array( 'script' => array() ) );
+			echo wp_kses( (string) ob_get_clean(), array( 'script' => array() ) );
 
 			wp_cache_set( 'eum_dismiss_notice', true );
 		}
@@ -476,7 +533,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			check_admin_referer( 'eum_dismiss_notice' );
 
 			$name   = sanitize_text_field( $_POST['name'] );
-			$expire = time() + $this->filter( 'dismiss_notice_expiration', HOUR_IN_SECONDS );
+			$expire = time() + (int) $this->filter( 'dismiss_notice_expiration', HOUR_IN_SECONDS );
 			$secure = is_ssl();
 
 			setcookie( $name, 'true', $expire, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
@@ -484,6 +541,10 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			wp_die();
 		}
 
+		/**
+		 * @param mixed $args
+		 * @return mixed
+		 * */
 		private function filter( string $hook_name, $args ) {
 			return apply_filters( $this->transient . '_' . $hook_name, $args );
 		}
