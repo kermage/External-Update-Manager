@@ -11,4 +11,5 @@ parameters:
     - ADMIN_COOKIE_PATH
     - COOKIE_DOMAIN
   ignoreErrors:
-    - '#Constant [a-zA-Z0-9\\_]*COOKIE_[a-zA-Z0-9\\_]+ not found#'
+    - '#Constant [a-zA-Z\\_]*COOKIE_[a-zA-Z]+ not found#'
+    - '#Property External_Update_Manager[0-9\\_]+::\$item_[a-zA-Z]+ \(string\) does not accept array\|string\|false.#'

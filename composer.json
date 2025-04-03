@@ -14,10 +14,16 @@
 		"dropin"
 	],
 	"config": {
+		"platform": {
+			"php": "7.4"
+		},
 		"allow-plugins": {
 			"phpstan/extension-installer": true,
 			"dealerdirect/phpcodesniffer-composer-installer": true
-		}
+		},
+		"optimize-autoloader": true,
+		"preferred-install": "dist",
+		"sort-packages": true
 	},
 	"require": {
 		"ext-json": "*",
@@ -32,7 +38,7 @@
 		"themeplate/tester": "^2.2"
 	},
 	"scripts": {
-		"analyse": "phpstan analyse -v",
+		"analyse": "phpstan analyse -v .",
 		"lint": "phpcs --colors -p -s -v",
 		"fix": "phpcbf -p -v"
 	}
