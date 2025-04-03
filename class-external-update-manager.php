@@ -522,7 +522,17 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 			$expire = time() + (int) $this->filter( 'dismiss_notice_expiration', HOUR_IN_SECONDS );
 			$secure = is_ssl();
 
-			setcookie( $name, 'true', $expire, ADMIN_COOKIE_PATH, COOKIE_DOMAIN, $secure, true );
+			setcookie(
+				$name,
+				'true',
+				array(
+					'expires'  => $expire,
+					'path'     => ADMIN_COOKIE_PATH,
+					'domain'   => COOKIE_DOMAIN,
+					'secure'   => $secure,
+					'httponly' => true,
+				)
+			);
 
 			wp_die();
 		}
