@@ -1,0 +1,41 @@
+name: Create Tag
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: write
+
+env:
+  COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+  WANTED_MESSAGE: 'bump version to '
+
+jobs:
+  create:
+    if: ${{ startsWith( github.event.head_commit.message, 'bump version to ' ) }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Get new version
+      shell: bash
+      run: |
+        COMMIT_MESSAGE="${{ env.COMMIT_MESSAGE }}"
+        WANTED_MESSAGE="${{ env.WANTED_MESSAGE }}"
+
+        VERSION="${COMMIT_MESSAGE/$WANTED_MESSAGE}"
+        VERSION="${VERSION#v}"
+        VERSION="${VERSION#V}"
+
+        echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
+
+    - name: Git tag version
+      run: |
+        echo "Tagging version $NEW_VERSION"
+
+        git tag "v$NEW_VERSION"
+        git push --tags
