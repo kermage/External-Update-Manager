@@ -9,7 +9,7 @@
  * @package External Update Manager
  * @link    https://github.com/kermage/External-Update-Manager
  * @author  Gene Alyson Fortunado Torcende
- * @version 2.6.1
+ * @version 3.0.0
  * @license GPL-3.0
  */
 
@@ -63,9 +63,9 @@ if ( ! class_exists( 'EUM_Handler' ) ) {
 
 }
 
-if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
+if ( ! class_exists( 'External_Update_Manager_3_0_0' ) ) {
 
-	EUM_Handler::add_version( '2.6.1' );
+	EUM_Handler::add_version( '3.0.0' );
 
 	/**
 	 * @package External Update Manager
@@ -93,7 +93,7 @@ if ( ! class_exists( 'External_Update_Manager_2_6_1' ) ) {
 	 * }&\stdClass
 	 */
 	// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
-	class External_Update_Manager_2_6_1 {
+	class External_Update_Manager_3_0_0 {
 
 		private string $update_url;
 		/** @var array<string, string> */
